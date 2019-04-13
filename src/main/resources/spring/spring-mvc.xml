@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.1.xsd">
+
+
+    <!--开启注解功能-->
+    <mvc:annotation-driven/>
+
+    <!--**************重要**************-->
+    <!--这里把webapp下的static目录( 自己建的，命名随意，不过好像一般都命名为static(s),resource(s) )
+        作为静态文件的存储目录告诉了springMVC.
+        由于在DispatcherServlet设置了urlMapping为"/",所以springMVC
+        会把所有的文件都处理，这样会把静态文件也都处理了，导致写好的
+        html，jsp中即使css,js,图片都配置了正确的路径，也依然没有效果
+    -->
+    <!--这样配置了以后，当url为/static/啥啥啥的时候，springMVC就知道不要用
+        DispatcherServlet去处理，直接映射到location指定的静态资源目录，
+        这样就能正确加载静态文件了
+    -->
+    <!-- 网址链接
+    https://stackoverflow.com/questions/15479213/how-to-serve-html-files-with-spring
+    -->
+    <!--另外还有一些其他方法，比如配置DispatcherServlet的urlMapping为
+        只处理指定后缀的资源请求，不过比较麻烦，而且后期如果有新的文件格式要添加的话，
+        还要在urlMapping里加，不好用。所以这里直接用Spring3.0.4后提供的专门为静态资源处理
+        提供的比较便捷的设置了
+    -->
+    <mvc:resources mapping="/static/**" location="/static/"/>
+
+    <!--自动扫描该包，使SpringMVC认为该包下用了@controller注解的类是控制器
+        这样就无需再在配置文件中配置controller的bean了
+    -->
+    <context:component-scan base-package="com.sugar.rent.controller"/>
+
+    <!--jsp视图解析器-->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/jsp/"/>
+        <property name="order" value="0"/>
+        <property name="contentType" value="text/html;charset=UTF-8"/>
+    </bean>
+
+    <!-- 定义文件解释器 -->
+    <!--<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">-->
+        <!--&lt;!&ndash; 设置默认编码 &ndash;&gt;-->
+        <!--<property name="defaultEncoding" value="utf-8"></property>-->
+        <!--&lt;!&ndash; 上传图片最大大小5M&ndash;&gt;-->
+        <!--<property name="maxUploadSize" value="5242440"></property>-->
+        <!--&lt;!&ndash; 最大内存大小 &ndash;&gt;-->
+        <!--<property name="maxInMemorySize" value="10240"/>-->
+    <!--</bean>-->
+
+    <!--spring mvc 登录 拦截器-->
+    <!--<mvc:interceptors>-->
+        <!--&lt;!&ndash; <mvc:interceptor>-->
+            <!--<mvc:mapping path="/download/**" />-->
+            <!--<mvc:mapping path="/upload/**" />-->
+            <!--<bean class="com.xxxx.interceptor.AuthInterceptor" />-->
+        <!--</mvc:interceptor> &ndash;&gt;-->
+        <!--&lt;!&ndash; 检查用户权限，对于部分不需要权限的路径进行排除 &ndash;&gt;-->
+        <!--<mvc:interceptor>-->
+            <!--&lt;!&ndash; 先匹配所有路径，然后排除不需要检查的路径 &ndash;&gt;-->
+            <!--<mvc:mapping path="/**" />-->
+            <!--&lt;!&ndash; 与登录相关的请求 &ndash;&gt;-->
+            <!--<mvc:exclude-mapping path="/login" />-->
+            <!--<mvc:exclude-mapping path="/checkLogin" />-->
+            <!--<mvc:exclude-mapping path="/register" />-->
+            <!--<mvc:exclude-mapping path="/doRegister" />-->
+            <!--<mvc:exclude-mapping path="/fail" />-->
+
+            <!--&lt;!&ndash; 以下是静态资源 &ndash;&gt;-->
+            <!--<mvc:exclude-mapping path="/static/images/**" />-->
+            <!--<mvc:exclude-mapping path="/static//css/**" />-->
+            <!--<mvc:exclude-mapping path="/static/fonts/**" />-->
+            <!--<mvc:exclude-mapping path="/static/js/**" />-->
+            <!--&lt;!&ndash; 客户端文件上传下载，不使用该校验 &ndash;&gt;-->
+            <!--&lt;!&ndash; <mvc:exclude-mapping path="/download/**" />-->
+            <!--<mvc:exclude-mapping path="/upload/**" /> &ndash;&gt;-->
+            <!--&lt;!&ndash; 用户是否已经登录的检查 &ndash;&gt;-->
+            <!--<bean id="loginInterceptor" class="team.ftg.resumegen.interceptor.LoginInterceptor"></bean>-->
+        <!--</mvc:interceptor>-->
+    <!--</mvc:interceptors>-->
+
+
+</beans>
+
+
