@@ -175,7 +175,7 @@
                         <input id="username" type="text" class="form-control" placeholder=" " name="Name" required>
                     </div>
                     <div class="form-group">
-                        <label for="password" class="col-form-label">Password</label>
+                        <label for="password" class="col-form-label">密码</label>
                         <input id="password" type="password" class="form-control" placeholder=" " name="Password"
                                required>
                     </div>
@@ -202,6 +202,7 @@
     </div>
 </div>
 <!-- //login -->
+
 <!-- register  -->
 <div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="registerModalLabel"
      aria-hidden="true">
