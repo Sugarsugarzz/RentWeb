@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=utf-8"
          pageEncoding="utf-8" %>
 
@@ -8,13 +9,166 @@
     <title>House Hunter</title>
     <meta charset="utf-8"/>
     <script>
-        addEventListener("load", function () {
-            setTimeout(hideURLbar, 0);
-        }, false);
 
-        function hideURLbar() {
-            window.scrollTo(0, 1);
+        /*
+        登录操作
+        */
+        function login() {
+            $.ajax({
+                type: 'POST',
+
+                contentType: 'application/json; charset-utf-8',
+
+                url: '/Rent/checkLogin',
+
+                dataType: 'json',
+
+                data: '{"username":"' + document.getElementById("username").value
+                    + '","password":"' + document.getElementById("password").value + '"}',
+
+                success: function (data) {
+                    if (data.flag == "success") {
+                        // location.href = "/Rent/main";
+
+                        document.getElementById("SignUp").style.display = "none";
+                        document.getElementById("SignIn").style.display = "none";
+                        document.getElementById("loginUserText").innerHTML = document.getElementById("username").value;
+                        document.getElementById("loginUser").style.display = "block";
+
+                        //display:none方法会影响模态框的下次出现
+                        $('#loginModal').modal('hide');
+
+
+                    } else if (data.flag == "failure") {
+                        var errorMessageDiv = document.getElementById("errorMessageDiv");
+                        if (!errorMessageDiv.hasChildNodes()) {
+                            var newNode = document.createElement("p");
+                            newNode.innerHTML = "账号或密码错误！";
+                            newNode.style.color = "#FF6347";
+                            errorMessageDiv.appendChild(newNode);
+                        }
+                    }
+                },
+
+                error: function () {
+                  alert("网络错误！");
+                }
+            })
         }
+
+        /*
+        用户名查重
+         */
+        function usernameValidate(obj) {
+            $.ajax({
+                type: 'POST',
+
+                contentType: 'application/json; charset=utf-8',
+
+                url: '/Rent/checkExistence',
+
+                dataType: 'json',
+
+                data: '{"username":"' + obj.value + '"}',
+
+                success: function (data) {
+                    var rootDiv = document.getElementById("messageDiv");
+                    var newNode;
+
+                    if (!rootDiv.hasChildNodes()) {
+                        newNode = document.createElement("p");
+                        newNode.id = "messageNode";
+                        rootDiv.appendChild(newNode);
+                    } else {
+                        newNode = document.getElementById("messageNode");
+                    }
+
+                    if (data.flag == "true" && obj.value != " ") {
+                        document.getElementById("password2").setCustomValidity("Passwords Don't Match")
+                        newNode.innerHTML = "该用户名已被注册！";
+                        newNode.style.color = "#FF6347";
+                    } else if (data.flag == "false") {
+                        newNode.innerHTML = "该用户名可以使用！";
+                        newNode.style.color = "#87CEFA";
+                    } else {
+                        newNode.innerHTML == " ";
+                    }
+                },
+
+                error: function (data) {
+                    alert("网络错误！");
+                }
+            })
+        }
+
+        /*
+        两次密码是否重复
+        */
+        function passwordValidate() {
+            var rootDiv = document.getElementById("passwordMessageDiv");
+            var newNode;
+            var pass1 = document.getElementById("password1").value;
+            var pass2 = document.getElementById("password2").value;
+
+            if (!rootDiv.hasChildNodes()) {
+                newNode = document.createElement("p");
+                newNode.id = "passwordMessageNode";
+                rootDiv.appendChild(newNode);
+            } else {
+                newNode = document.getElementById("passwordMessageNode");
+            }
+
+            if (pass1 != pass2) {
+                newNode.innerHTML = "两次输入的密码不一致！";
+                newNode.style.color = "#FF6347";
+            } else {
+                newNode.innerHTML = " ";
+            }
+
+        }
+        /*
+        注册操作
+         */
+        function register() {
+
+            if (document.getElementById("messageNode").innerHTML == "该用户名已被注册！") {
+
+            } else {
+                $.ajax({
+                    type: 'POST',
+
+                    contentType: 'application/json; charset=utf-7',
+
+                    url: '/Rent/doRegister',
+
+                    dataType: 'json',
+
+                    data: '{"username":"' + document.getElementById("username1").value
+                        +   '", "password":"' + document.getElementById("password1").value + '"}',
+
+                    success: function (data) {
+                        if (data.flag == "success") {
+                            document.getElementById("SignUp").style.display = "none";
+                            document.getElementById("SignIn").style.display = "none";
+                            document.getElementById("loginUserText").innerHTML = document.getElementById("username1").value;
+                            document.getElementById("loginUser").style.display = "block";
+
+                            //display:none方法会影响模态框的下次出现
+                            $('#registerModal').modal('hide');
+                        }  else if (data.flag == "failure") {
+                            alert("注册失败，请稍后重试。")
+                        }
+                    },
+
+                    error: function () {
+                        alert("网络错误！")
+                    }
+                })
+            }
+
+        }
+
+
     </script>
     <!-- Custom Theme files -->
     <link href="${pageContext.request.contextPath}/static/css/login/bootstrap.css" type="text/css" rel="stylesheet"
@@ -45,7 +199,7 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav ml-lg-auto text-center">
                         <li class="nav-item active  mr-lg-3">
-                            <a class="nav-link" href="home.jsp">Home
+                            <a class="nav-link" href="home.jsp">主页
                                 <span class="sr-only">(current)</span>
                             </a>
                         </li>
@@ -71,17 +225,31 @@
                             <a class="nav-link scroll" href="#register">说明/公告</a>
                         </li>
                         <li>
-                            <button type="button" class="btn  ml-lg-2 w3ls-btn" data-toggle="modal" aria-pressed="false"
+                            <button id="SignUp" style="display: block;" type="button" class="btn  ml-lg-2 w3ls-btn" data-toggle="modal" aria-pressed="false"
                                     data-target="#registerModal">
                                 注册
                             </button>
                         </li>
                         <li>
-                            <button type="button" class="btn  ml-lg-2 w3ls-btn" data-toggle="modal" aria-pressed="false"
+                            <button id="SignIn" style="display: block;" type="button" class="btn  ml-lg-2 w3ls-btn" data-toggle="modal" aria-pressed="false"
                                     data-target="#loginModal">
                                 登录
                             </button>
                         </li>
+                        <li style="display: none;" id="loginUser" class="nav-item dropdown mr-lg-3 mt-lg-0 mt-3">
+                            <a class="nav-link dropdown-toggle" id="loginUserText" role="button"
+                               data-toggle="dropdown" aria-haspopup="true"
+                               aria-expanded="false">
+
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item scroll" href="#process">设置地址</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item scroll" href="#partners">退出登录</a>
+                                <div class="dropdown-divider"></div>
+                            </div>
+                        </li>
+
                     </ul>
                 </div>
 
@@ -102,7 +270,7 @@
                     </p>
 
                     <a class="btn btn-theme mt-lg-5 mt-3 agile-link-bnr scroll btn-outline-secondary btn-change5"
-                       href="#register" role="button">
+                       href="<c:url value="/main"/> " role="button">
                         马上开始
                     </a>
                 </div>
@@ -169,7 +337,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="#" method="post">
+                <form action="javascript:login()" method="post">
                     <div class="form-group">
                         <label for="username" class="col-form-label">用户名</label>
                         <input id="username" type="text" class="form-control" placeholder=" " name="Name" required>
@@ -179,6 +347,8 @@
                         <input id="password" type="password" class="form-control" placeholder=" " name="Password"
                                required>
                     </div>
+                    <%--输入错误提示占位--%>
+                    <div id="errorMessageDiv"></div>
                     <div class="right-w3l">
                         <input type="submit" class="form-control" value="登录">
                     </div>
@@ -209,26 +379,29 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">注册账户</h5>
+                <h5 class="modal-title" id="registerModalLabel">注册账户</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form action="#" method="post">
+                <form action="javascript:register()" method="post">
                     <div class="form-group">
                         <label for="username1" class="col-form-label">用户名</label>
-                        <input id="username1" type="text" class="form-control" placeholder=" " name="Name" required>
+                        <input id="username1" onkeyup="usernameValidate(this)" type="text" class="form-control" placeholder=" " name="Name" required>
                     </div>
+                    <%--用户名输入提示占位--%>
+                    <div id="messageDiv"></div>
                     <div class="form-group">
                         <label for="password1" class="col-form-label">密码</label>
                         <input id="password1" type="password" class="form-control" placeholder=" " name="Password"
                                required>
                         <label for="password2" class="col-form-label">确认密码</label>
-                        <input id="password2" type="password" class="form-control" placeholder=" " name="Password"
+                        <input id="password2" onkeyup="passwordValidate()" type="password" class="form-control" placeholder=" " name="Password"
                                required>
-                        <label class="col-form-label"> </label>
                     </div>
+                    <%--密码输入提示占位--%>
+                    <div id="passwordMessageDiv"></div>
                     <div class="right-w3l">
                         <input type="submit" class="form-control" value="注册">
                     </div>
@@ -242,30 +415,9 @@
 
 <!-- js -->
 <script src="${pageContext.request.contextPath}/static/js/login/jquery-2.2.3.min.js"></script>
-<!-- //js -->
-<!-- script for password match -->
-<script>
-    window.onload = function () {
-        document.getElementById("password1").onchange = validatePassword;
-        document.getElementById("password2").onchange = validatePassword;
-    }
-
-    function validatePassword() {
-        var pass2 = document.getElementById("password2").value;
-        var pass1 = document.getElementById("password1").value;
-        if (pass1 != pass2)
-            document.getElementById("password2").setCustomValidity("Passwords Don't Match");
-        else
-            document.getElementById("password2").setCustomValidity('');
-        //empty string means no validation error
-    }
-</script>
-<!-- script for password match -->
-
-<!-- Bootstrap core JavaScript
-================================================== -->
-<!-- Placed at the end of the document so the pages load faster -->
 <script src="${pageContext.request.contextPath}/static/js/login/bootstrap.js"></script>
+<!-- //js -->
+
 </body>
 
 </html>
