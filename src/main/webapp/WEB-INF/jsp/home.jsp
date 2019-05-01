@@ -17,7 +17,7 @@
             $.ajax({
                 type: 'POST',
 
-                contentType: 'application/json; charset-utf-8',
+                contentType: 'application/json; charset=utf-8',
 
                 url: '/Rent/checkLogin',
 
@@ -137,7 +137,7 @@
                 $.ajax({
                     type: 'POST',
 
-                    contentType: 'application/json; charset=utf-7',
+                    contentType: 'application/json; charset=utf-8',
 
                     url: '/Rent/doRegister',
 
@@ -165,6 +165,16 @@
                     }
                 })
             }
+
+        }
+        /*
+        退出登录
+         */
+        function loginOut() {
+
+            document.getElementById("SignUp").style.display = "block";
+            document.getElementById("SignIn").style.display = "block";
+            document.getElementById("loginUser").style.display = "none";
 
         }
 
@@ -216,6 +226,12 @@
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item scroll" href="#partners">深圳</a>
                                 <div class="dropdown-divider"></div>
+                                <a class="dropdown-item scroll" href="#partners">广州</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item scroll" href="#partners">杭州</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item scroll" href="#partners">成都</a>
+                                <div class="dropdown-divider"></div>
                             </div>
                         </li>
                         <li class="nav-item mr-lg-3 mt-lg-0 mt-3">
@@ -245,7 +261,7 @@
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item scroll" href="#process">设置地址</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item scroll" href="#partners">退出登录</a>
+                                <a class="dropdown-item scroll" onclick="loginOut()">退出登录</a>
                                 <div class="dropdown-divider"></div>
                             </div>
                         </li>
