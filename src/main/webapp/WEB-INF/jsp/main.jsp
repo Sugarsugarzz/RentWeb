@@ -53,7 +53,10 @@
         <input id="search" type="button" class="btn" onclick="loadWorkRange()" value="查询" />
         <input id="clear" type="button" class="btn"  onclick="delWorkRange()" value="清除" />
     </div>
-    <input type="button" class="btn" onclick="loadRentLocation()" value="导入" />
+    <div>
+        <input type="button" class="btn" onclick="loadRentLocation()" value="导入" />
+        <input type="button" class="btn" onclick="delRentLocation()" value="清除" />
+    </div>
 </div>
 
 <div id="transfer_panel"></div>
@@ -89,6 +92,9 @@
         workAddress = e.poi.name;
         loadWorkLocation();
     });
+
+    // 信息窗体
+    var infoWindow = new AMap.InfoWindow({offset: new AMap.Pixel(0, -30)});
 
 
 
@@ -170,6 +176,16 @@
                     icon: 'http://webapi.amap.com/theme/v1.3/markers/n/mark_b.png',
                     position: [geocode.location.getLng(), geocode.location.getLat()]
                 });
+                rentMarkerArray.push(rentMarker);
+
+                rentMarker.content = "我是Marker";
+                rentMarker.on('click', function (e) {
+                    infoWindow.setContent(e.target.content);
+                    infoWindow.open(map, e.target.getPosition());
+                });
+
+
+
             }
         })
     }
@@ -193,12 +209,13 @@
     // 删除工作地点标记
     function delWorkLocation() {
         if (workMarker) map.remove(workMarker);
+        if (polygonArray) map.remove(polygonArray);
+        polygonArray = [];
     }
 
     // 删除所有房源标记
     function delRentLocation() {
         if (rentMarkerArray) map.remove(rentMarkerArray);
-        if (workMarker) map.remove(workMarker);
         rentMarkerArray = [];
     }
 
