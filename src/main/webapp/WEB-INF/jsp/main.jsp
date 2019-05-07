@@ -189,7 +189,6 @@
             if (status === "complete" && result.info === 'OK') {
                 var geocode = result.geocodes[0];
                 rentMarker = new AMap.Marker({
-                    map: map,
                     title: address,
                     icon: 'http://webapi.amap.com/theme/v1.3/markers/n/mark_b.png',
                     position: [geocode.location.getLng(), geocode.location.getLat()]
@@ -224,7 +223,7 @@
         delRentLocation(); //必要时删除
         var rent_locations = new Set();
 
-        $.get("/Rent/static/csv/rent.csv", function (data) {
+        $.get("/Rent/static/csv/LianjiaBj.csv", function (data) {
             data = data.split("\n");
             data.forEach(function (item, index) {
                 rent_locations.add(item.split(",")[1]);
@@ -239,7 +238,7 @@
     function addCluster() {
         if (cluster) cluster.setMap(null);
         var sts = [{
-            url: "https://a.amap.com/jsapi_demos/static/images/blue.png",
+            url: "https://a.amap.com/jsapi_demos/static/images/green.png",
             size: new AMap.Size(32, 32),
             offset: new AMap.Pixel(-16, -16)
         }, {
@@ -304,6 +303,8 @@
             showScale: true
         });
     });
+
+
 </script>
 </body>
 </html>
