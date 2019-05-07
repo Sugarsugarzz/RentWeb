@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="http://cache.amap.com/lbs/static/jquery.range.css" />
     <script src="http://cache.amap.com/lbs/static/jquery-1.9.1.js"></script>
     <script src="https://cache.amap.com/lbs/static/es5.min.js"></script>
-    <script src="https://webapi.amap.com/maps?v=1.4.14&key=ac0954489531af464cb5d86b6d522a7d&&plugin=AMap.Scale,AMap.Geocoder,AMap.Autocomplete,AMap.ArrivalRange,AMap.Transfer"></script>
+    <script src="https://webapi.amap.com/maps?v=1.4.14&key=ac0954489531af464cb5d86b6d522a7d&&plugin=AMap.Scale,AMap.Geocoder,AMap.Autocomplete,AMap.ArrivalRange,AMap.Transfer,AMap.MarkerClusterer"></script>
     <script src="http://cache.amap.com/lbs/static/jquery.range.js"></script>
     <script src="https://cache.amap.com/lbs/static/addToolbar.js"></script>
 
@@ -73,6 +73,7 @@
         <input type="button" class="btn" onclick="loadRentLocation()" value="导入" />
         <input type="button" class="btn" onclick="delRentLocation()" value="清除" />
         <input type="button" class="btn" onclick="delTransferPlan()" value="清除" />
+        <input type="button" class="btn" onclick="addCluster()" value="聚合" />
     </div>
 </div>
 
@@ -97,7 +98,7 @@
     var workAddress, workMarker;                    // 工作地点
     var x, y, t, v, arrivalRange, polygonArray=[];  // 到达圈
     arrivalRange = new AMap.ArrivalRange();
-    var rentMarkerArray = [];                       // 租房房源
+    var cluster, rentMarkerArray = [];                       // 租房房源
     var mapTransfer;                                // 交通路程规划
 
     // 输入提示
@@ -107,12 +108,12 @@
     });
     AMap.event.addListener(autoComplete, "select", function (e) {
         workAddress = e.poi.name;
+        delTransferPlan();
         loadWorkLocation();
     });
 
     // 信息窗体
     var infoWindow = new AMap.InfoWindow({offset: new AMap.Pixel(0, -30)});
-
 
 
     // 添加工作地点标记
@@ -231,6 +232,36 @@
             rent_locations.forEach(function (element, index) {
                 addMarkerByAddress(element);
             });
+        });
+    }
+
+    //点聚合
+    function addCluster() {
+        if (cluster) cluster.setMap(null);
+        var sts = [{
+            url: "https://a.amap.com/jsapi_demos/static/images/blue.png",
+            size: new AMap.Size(32, 32),
+            offset: new AMap.Pixel(-16, -16)
+        }, {
+            url: "https://a.amap.com/jsapi_demos/static/images/green.png",
+            size: new AMap.Size(32, 32),
+            offset: new AMap.Pixel(-16, -16)
+        }, {
+            url: "https://a.amap.com/jsapi_demos/static/images/orange.png",
+            size: new AMap.Size(36, 36),
+            offset: new AMap.Pixel(-18, -18)
+        }, {
+            url: "https://a.amap.com/jsapi_demos/static/images/red.png",
+            size: new AMap.Size(48, 48),
+            offset: new AMap.Pixel(-24, -24)
+        }, {
+            url: "https://a.amap.com/jsapi_demos/static/images/darkRed.png",
+            size: new AMap.Size(48, 48),
+            offset: new AMap.Pixel(-24, -24)
+        }];
+        cluster = new AMap.MarkerClusterer(map, rentMarkerArray, {
+            styles: sts,
+            gridSize: 80
         });
     }
 
