@@ -15,6 +15,8 @@
     <script src="http://cache.amap.com/lbs/static/jquery.range.js"></script>
     <script src="https://cache.amap.com/lbs/static/addToolbar.js"></script>
 
+    <script src="${pageContext.request.contextPath}/static/js/main/LianjiaBj.js"></script>
+
     <style>
         html, body, #container {
             height: 100%;
@@ -70,17 +72,14 @@
         <input id="clear" type="button" class="btn"  onclick="delWorkRange()" value="清除" />
     </div>
     <div>
-        <input type="button" class="btn" onclick="loadRentLocation()" value="导入" />
         <input type="button" class="btn" onclick="delRentLocation()" value="清除" />
         <input type="button" class="btn" onclick="delTransferPlan()" value="清除" />
-        <input type="button" class="btn" onclick="addCluster()" value="聚合" />
     </div>
 </div>
 
 <div id="transfer_panel"></div>
 
 <%-------------------------Script-------------------------%>
-
 <script>
     // 初始化地图
     var map = new AMap.Map("container", {
@@ -98,8 +97,11 @@
     var workAddress, workMarker;                    // 工作地点
     var x, y, t, v, arrivalRange, polygonArray=[];  // 到达圈
     arrivalRange = new AMap.ArrivalRange();
-    var cluster, rentMarkerArray = [];                       // 租房房源
+    var cluster, rentMarkerArray = [];              // 租房房源
     var mapTransfer;                                // 交通路程规划
+
+    // 信息窗体
+    var infoWindow = new AMap.InfoWindow({offset: new AMap.Pixel(0, -30)});
 
     // 输入提示
     // 给输入提示控件注册监听，选中地址后加载点标记和到达圈
@@ -112,8 +114,41 @@
         loadWorkLocation();
     });
 
-    // 信息窗体
-    var infoWindow = new AMap.InfoWindow({offset: new AMap.Pixel(0, -30)});
+
+    // 加载房源信息
+    for (var i = 0; i < points.length; i++) {
+        var rentMark = new AMap.Marker({
+            position: points[i]['lnglat'],
+            title: points[i]['title'],
+            icon: 'http://webapi.amap.com/theme/v1.3/markers/n/mark_b.png',
+            offset: new AMap.Pixel(-15, -15),
+            // content: '<a href=' + points[i]['url'] +
+            //          '><img src="http://webapi.amap.com/theme/v1.3/markers/n/mark_b.png"></a>'
+            // content: '<img src="http://webapi.amap.com/theme/v1.3/markers/n/mark_b.png">'
+        });
+        rentMark.content = points[i]['title'];
+        rentMark.on('click', function (e) {
+            // 信息窗体
+            var info = [];
+            info.push("<div>Hello</div> ");
+            infoWindow.setContent(info.join(" "));
+            infoWindow.open(map, e.target.getPosition());
+            // 路程规划
+            if (mapTransfer) mapTransfer.clear();
+            mapTransfer = new AMap.Transfer({
+                map: map,
+                city: '北京市',
+                panel: 'transfer_panel',
+                policy: AMap.TransferPolicy.LEAST_TIME //乘车策略
+            });
+            mapTransfer.search([
+                {keyword: workAddress},
+                {keyword: '北京科技大学'}
+            ], function(status, result) { });
+        })
+        rentMarkerArray.push(rentMark);
+    }
+    addCluster();
 
 
     // 添加工作地点标记
@@ -178,63 +213,7 @@
         });
     }
 
-    // 添加房源标记
-    function addMarkerByAddress(address) {
-        var geocoder = new AMap.Geocoder({
-            city: "北京",
-            radius: 1000
-        });
-
-        geocoder.getLocation(address, function (status, result) {
-            if (status === "complete" && result.info === 'OK') {
-                var geocode = result.geocodes[0];
-                rentMarker = new AMap.Marker({
-                    title: address,
-                    icon: 'http://webapi.amap.com/theme/v1.3/markers/n/mark_b.png',
-                    position: [geocode.location.getLng(), geocode.location.getLat()]
-                });
-                rentMarkerArray.push(rentMarker);
-
-                rentMarker.content = address;
-                rentMarker.on('click', function (e) {
-                    // 信息窗体
-                    infoWindow.setContent(e.target.content);
-                    infoWindow.open(map, e.target.getPosition());
-
-                    // 路程规划
-                    if (mapTransfer) mapTransfer.clear();
-                    mapTransfer = new AMap.Transfer({
-                        map: map,
-                        city: '北京市',
-                        panel: 'transfer_panel',
-                        policy: AMap.TransferPolicy.LEAST_TIME //乘车策略
-                    });
-                    mapTransfer.search([
-                        {keyword: workAddress},
-                        {keyword: address}
-                    ], function(status, result) { });
-                });
-            }
-        })
-    }
-
-    // 加载房源位置
-    function loadRentLocation() {
-        delRentLocation(); //必要时删除
-        var rent_locations = new Set();
-
-        $.get("/Rent/static/csv/LianjiaBj.csv", function (data) {
-            data = data.split("\n");
-            data.forEach(function (item, index) {
-                rent_locations.add(item.split(",")[1]);
-            });
-            rent_locations.forEach(function (element, index) {
-                addMarkerByAddress(element);
-            });
-        });
-    }
-
-    //点聚合
+    // 点聚合
     function addCluster() {
         if (cluster) cluster.setMap(null);
         var sts = [{
@@ -260,7 +239,8 @@
         }];
         cluster = new AMap.MarkerClusterer(map, rentMarkerArray, {
             styles: sts,
-            gridSize: 80
+            gridSize: 80,
+            minClusterSize: 15
         });
     }
 
