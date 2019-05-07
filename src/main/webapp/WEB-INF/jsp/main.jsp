@@ -11,17 +11,33 @@
     <link rel="stylesheet" href="http://cache.amap.com/lbs/static/jquery.range.css" />
     <script src="http://cache.amap.com/lbs/static/jquery-1.9.1.js"></script>
     <script src="https://cache.amap.com/lbs/static/es5.min.js"></script>
-    <script src="https://webapi.amap.com/maps?v=1.4.14&key=ac0954489531af464cb5d86b6d522a7d&&plugin=AMap.Scale,AMap.Geocoder,AMap.Autocomplete,AMap.ArrivalRange"></script>
+    <script src="https://webapi.amap.com/maps?v=1.4.14&key=ac0954489531af464cb5d86b6d522a7d&&plugin=AMap.Scale,AMap.Geocoder,AMap.Autocomplete,AMap.ArrivalRange,AMap.Transfer"></script>
     <script src="http://cache.amap.com/lbs/static/jquery.range.js"></script>
     <script src="https://cache.amap.com/lbs/static/addToolbar.js"></script>
 
     <style>
         html, body, #container {
             height: 100%;
+            width: 100%;
         }
         .btn{
             margin-left: 0.5rem;
             width:4rem;
+        }
+        #transfer_panel {
+            position: fixed;
+            background-color: white;
+            max-height: 90%;
+            overflow-y: auto;
+            top: 10px;
+            right: 10px;
+            width: 280px;
+            background-color: #009cf9;
+            border-top-left-radius: 4px;
+            border-top-right-radius: 4px;
+            border-bottom-left-radius: 4px;
+            border-bottom-right-radius: 4px;
+            overflow: hidden;
         }
     </style>
 </head>
@@ -56,6 +72,7 @@
     <div>
         <input type="button" class="btn" onclick="loadRentLocation()" value="导入" />
         <input type="button" class="btn" onclick="delRentLocation()" value="清除" />
+        <input type="button" class="btn" onclick="delTransferPlan()" value="清除" />
     </div>
 </div>
 
@@ -80,8 +97,8 @@
     var workAddress, workMarker;                    // 工作地点
     var x, y, t, v, arrivalRange, polygonArray=[];  // 到达圈
     arrivalRange = new AMap.ArrivalRange();
-
     var rentMarkerArray = [];                       // 租房房源
+    var mapTransfer;                                // 交通路程规划
 
     // 输入提示
     // 给输入提示控件注册监听，选中地址后加载点标记和到达圈
@@ -178,14 +195,25 @@
                 });
                 rentMarkerArray.push(rentMarker);
 
-                rentMarker.content = "我是Marker";
+                rentMarker.content = address;
                 rentMarker.on('click', function (e) {
+                    // 信息窗体
                     infoWindow.setContent(e.target.content);
                     infoWindow.open(map, e.target.getPosition());
+
+                    // 路程规划
+                    if (mapTransfer) mapTransfer.clear();
+                    mapTransfer = new AMap.Transfer({
+                        map: map,
+                        city: '北京市',
+                        panel: 'transfer_panel',
+                        policy: AMap.TransferPolicy.LEAST_TIME //乘车策略
+                    });
+                    mapTransfer.search([
+                        {keyword: workAddress},
+                        {keyword: address}
+                    ], function(status, result) { });
                 });
-
-
-
             }
         })
     }
@@ -224,6 +252,12 @@
         map.remove(polygonArray);
         polygonArray = [];
     }
+
+    // 删除路程规划
+    function delTransferPlan() {
+        if (mapTransfer) mapTransfer.clear();
+    }
+
 
     // 到达时间调控条
     $(function(){
