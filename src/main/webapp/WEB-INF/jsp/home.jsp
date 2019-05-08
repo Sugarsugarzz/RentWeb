@@ -282,7 +282,7 @@
                     </h3>
 
                     <p class="text-white">
-                        多平台房源爬虫+百度地图强力驱动，助您迅速找到合适房源。
+                        多平台房源爬虫+高德地图强力驱动，助您迅速找到合适房源。
                     </p>
 
                     <a class="btn btn-theme mt-lg-5 mt-3 agile-link-bnr scroll btn-outline-secondary btn-change5"
