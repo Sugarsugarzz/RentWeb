@@ -15,7 +15,7 @@
     <script src="http://cache.amap.com/lbs/static/jquery.range.js"></script>
     <script src="https://cache.amap.com/lbs/static/addToolbar.js"></script>
 
-    <script src="${pageContext.request.contextPath}/static/js/main/LianjiaBj.js"></script>
+    <script src="${pageContext.request.contextPath}/static/js/houses/LianjiaBj.js"></script>
 
     <style>
         html, body, #container {
@@ -127,10 +127,19 @@
             // content: '<img src="http://webapi.amap.com/theme/v1.3/markers/n/mark_b.png">'
         });
         rentMark.content = points[i]['title'];
+        /*
+        需要在事件内使用事件外的循环变量i。
+        你的循环中只是为元素绑定事件，这时事件并没有触发执行。
+        等到事件触发时，那个循环早已经结束了，那时的i的值已经是循环最大值加1了。
+        所以需要用一些方式保存住当前循环的i的值。
+        用let块作用域变量. ⏬
+         */
+        let j = i;
         rentMark.on('click', function (e) {
             // 信息窗体
             var info = [];
-            info.push("<div>Hello</div> ");
+            info.push("<p class='input-item'>房源：" + points[j]['title'] + "️</p>");
+            info.push("<p class='input-item'>点击跳转：<a target='_blank' href='" + points[j]['url'] + "'>➡️</a>️</p>");
             infoWindow.setContent(info.join(" "));
             infoWindow.open(map, e.target.getPosition());
             // 路程规划
@@ -143,7 +152,7 @@
             });
             mapTransfer.search([
                 {keyword: workAddress},
-                {keyword: '北京科技大学'}
+                {keyword: points[j]['location']}
             ], function(status, result) { });
         })
         rentMarkerArray.push(rentMark);
@@ -185,7 +194,6 @@
                     polygonArray.push(polygon);
                 }
                 map.add(polygonArray);
-                map.setFitView();
             }
         }, {
             policy: v
@@ -240,7 +248,7 @@
         cluster = new AMap.MarkerClusterer(map, rentMarkerArray, {
             styles: sts,
             gridSize: 80,
-            minClusterSize: 15
+            minClusterSize: 8
         });
     }
 
@@ -268,6 +276,12 @@
         if (mapTransfer) mapTransfer.clear();
     }
 
+    //限制地图显示范围
+    function lockMapBounds() {
+        var bounds = map.getBounds();
+        map.setLimitBounds(bounds);
+    }
+    lockMapBounds();
 
     // 到达时间调控条
     $(function(){
@@ -283,6 +297,8 @@
             showScale: true
         });
     });
+
+
 
 
 </script>
