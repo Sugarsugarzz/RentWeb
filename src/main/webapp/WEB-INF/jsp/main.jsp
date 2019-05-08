@@ -16,6 +16,10 @@
     <script src="https://cache.amap.com/lbs/static/addToolbar.js"></script>
 
     <script src="${pageContext.request.contextPath}/static/js/houses/LianjiaBj.js"></script>
+    <script src="${pageContext.request.contextPath}/static/js/houses/LianjiaSh.js"></script>
+    <script src="${pageContext.request.contextPath}/static/js/houses/LianjiaGz.js"></script>
+    <script src="${pageContext.request.contextPath}/static/js/houses/LianjiaSz.js"></script>
+    <script src="${pageContext.request.contextPath}/static/js/houses/LianjiaCd.js"></script>
 
     <style>
         html, body, #container {
@@ -49,6 +53,18 @@
 <div id="container"></div>
 
 <div class="input-card" style='width:25rem;'>
+    <div class="input-item">
+        <div class="input-item-prepend">
+        <label class="input-item-text">城市</label>
+        </div>
+        <select id="city" onchange="setCity()" >
+            <option selected value ="北京市">北京市</option>
+            <option value ="上海市">上海市</option>
+            <option value ="广州市">广州市</option>
+            <option value ="深圳市">深圳市</option>
+            <option value ="成都市">成都市</option>
+        </select>
+    </div>
     <h4 style='color:grey'>公交到达圈查询</h4>
     <div class="input-item">
         <div class="input-item-prepend"><span class="input-item-text" >工作地点</span></div>
@@ -81,27 +97,69 @@
 
 <%-------------------------Script-------------------------%>
 <script>
-    // 初始化地图
-    var map = new AMap.Map("container", {
-        resizeEnable: true, //是否监控地图容器尺寸变化
-        zoomEnable: true,
-        zoom: 11, //初始化地图层级
-        center: [116.397428, 39.90923], //初始化地图中心点 （北京）
-    });
-
-    // 添加左下角的刻度尺
-    var scale = new AMap.Scale();
-    map.addControl(scale);
 
     // 全局变量们
+    var map;                                        // 地图
+    var city = $("#city").val();                    // 城市
+    var points = points_bj;
     var workAddress, workMarker;                    // 工作地点
     var x, y, t, v, arrivalRange, polygonArray=[];  // 到达圈
     arrivalRange = new AMap.ArrivalRange();
     var cluster, rentMarkerArray = [];              // 租房房源
     var mapTransfer;                                // 交通路程规划
 
+    var cityToLngLat = {
+        "北京市": [116.397428,39.90923],
+        "上海市": [121.473658,31.230378],
+        "广州市": [113.264385,23.129112],
+        "深圳市": [114.085947,22.547],
+        "成都市": [104.066143,30.573095]
+    };
+
+    setCity();
+    // 设置城市
+    function setCity() {
+        city = $("#city").val();
+        if (map) map.destroy();
+        // 初始化地图
+        map = new AMap.Map("container", {
+            resizeEnable: true, //是否监控地图容器尺寸变化
+            zoomEnable: true,
+            zoom: 11, //初始化地图层级
+            center: cityToLngLat[city], //初始化地图中心
+        });
+        lockMapBounds(); // 限制地图显示范围
+
+        // 设置房源文件索引列表
+        switch (city) {
+            case "北京市":
+                points = points_bj;
+                break;
+            case "上海市":
+                points = points_sh;
+                break;
+            case "广州市":
+                points = points_gz;
+                break;
+            case "深圳市":
+                points = points_sz;
+                break;
+            case "成都市":
+                points = points_cd;
+                break;
+        }
+
+        // 加载房源坐标
+        loadRentLocation();
+    }
+
     // 信息窗体
     var infoWindow = new AMap.InfoWindow({offset: new AMap.Pixel(0, -30)});
+
+    // 添加左下角的刻度尺
+    var scale = new AMap.Scale();
+    map.addControl(scale);
+
 
     // 输入提示
     // 给输入提示控件注册监听，选中地址后加载点标记和到达圈
@@ -116,49 +174,46 @@
 
 
     // 加载房源信息
-    for (var i = 0; i < points.length; i++) {
-        var rentMark = new AMap.Marker({
-            position: points[i]['lnglat'],
-            title: points[i]['title'],
-            icon: 'http://webapi.amap.com/theme/v1.3/markers/n/mark_b.png',
-            offset: new AMap.Pixel(-15, -15),
-            // content: '<a href=' + points[i]['url'] +
-            //          '><img src="http://webapi.amap.com/theme/v1.3/markers/n/mark_b.png"></a>'
-            // content: '<img src="http://webapi.amap.com/theme/v1.3/markers/n/mark_b.png">'
-        });
-        rentMark.content = points[i]['title'];
-        /*
-        需要在事件内使用事件外的循环变量i。
-        你的循环中只是为元素绑定事件，这时事件并没有触发执行。
-        等到事件触发时，那个循环早已经结束了，那时的i的值已经是循环最大值加1了。
-        所以需要用一些方式保存住当前循环的i的值。
-        用let块作用域变量. ⏬
-         */
-        let j = i;
-        rentMark.on('click', function (e) {
-            // 信息窗体
-            var info = [];
-            info.push("<p class='input-item'>房源：" + points[j]['title'] + "️</p>");
-            info.push("<p class='input-item'>点击跳转：<a target='_blank' href='" + points[j]['url'] + "'>➡️</a>️</p>");
-            infoWindow.setContent(info.join(" "));
-            infoWindow.open(map, e.target.getPosition());
-            // 路程规划
-            if (mapTransfer) mapTransfer.clear();
-            mapTransfer = new AMap.Transfer({
-                map: map,
-                city: '北京市',
-                panel: 'transfer_panel',
-                policy: AMap.TransferPolicy.LEAST_TIME //乘车策略
+    function loadRentLocation() {
+        for (var i = 0; i < points.length; i++) {
+            var rentMark = new AMap.Marker({
+                position: points[i]['lnglat'],
+                title: points[i]['title'],
+                icon: 'http://webapi.amap.com/theme/v1.3/markers/n/mark_b.png',
             });
-            mapTransfer.search([
-                {keyword: workAddress},
-                {keyword: points[j]['location']}
-            ], function(status, result) { });
-        })
-        rentMarkerArray.push(rentMark);
+            rentMark.content = points[i]['title'];
+            /*
+            需要在事件内使用事件外的循环变量i。
+            你的循环中只是为元素绑定事件，这时事件并没有触发执行。
+            等到事件触发时，那个循环早已经结束了，那时的i的值已经是循环最大值加1了。
+            所以需要用一些方式保存住当前循环的i的值。
+            用let块作用域变量. ⏬
+             */
+            let j = i;
+            rentMark.on('click', function (e) {
+                // 信息窗体
+                var info = [];
+                info.push("<p class='input-item'>房源：" + points[j]['title'] + "️</p>");
+                info.push("<p class='input-item'>点击跳转：<a target='_blank' href='" + points[j]['url'] + "'>➡️</a>️</p>");
+                infoWindow.setContent(info.join(" "));
+                infoWindow.open(map, e.target.getPosition());
+                // 路程规划
+                if (mapTransfer) mapTransfer.clear();
+                mapTransfer = new AMap.Transfer({
+                    map: map,
+                    city: city,
+                    panel: 'transfer_panel',
+                    policy: AMap.TransferPolicy.LEAST_TIME //乘车策略
+                });
+                mapTransfer.search([
+                    {keyword: workAddress},
+                    {keyword: points[j]['location']}
+                ], function(status, result) { });
+            })
+            rentMarkerArray.push(rentMark);
+        }
+        addCluster();
     }
-    addCluster();
-
 
     // 添加工作地点标记
     function addWorkMarker() {
@@ -204,7 +259,7 @@
     function loadWorkLocation() {
         delWorkLocation();
         var geocoder = new AMap.Geocoder({
-            city: "北京",
+            city: city,
             radius: 1000
         });
 
@@ -281,7 +336,6 @@
         var bounds = map.getBounds();
         map.setLimitBounds(bounds);
     }
-    lockMapBounds();
 
     // 到达时间调控条
     $(function(){
@@ -297,8 +351,6 @@
             showScale: true
         });
     });
-
-
 
 
 </script>
