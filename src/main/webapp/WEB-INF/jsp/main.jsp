@@ -13,7 +13,6 @@
     <script src="https://cache.amap.com/lbs/static/es5.min.js"></script>
     <script src="https://webapi.amap.com/maps?v=1.4.14&key=ac0954489531af464cb5d86b6d522a7d&&plugin=AMap.Scale,AMap.Geocoder,AMap.Autocomplete,AMap.ArrivalRange,AMap.Transfer,AMap.MarkerClusterer"></script>
     <script src="http://cache.amap.com/lbs/static/jquery.range.js"></script>
-    <script src="https://cache.amap.com/lbs/static/addToolbar.js"></script>
 
     <script src="${pageContext.request.contextPath}/static/js/houses/LianjiaBj.js"></script>
     <script src="${pageContext.request.contextPath}/static/js/houses/LianjiaSh.js"></script>
@@ -36,7 +35,7 @@
             max-height: 90%;
             overflow-y: auto;
             top: 10px;
-            right: 10px;
+            left: 10px;
             width: 280px;
             background-color: #009cf9;
             border-top-left-radius: 4px;
@@ -65,7 +64,6 @@
             <option value ="成都市">成都市</option>
         </select>
     </div>
-    <h4 style='color:grey'>公交到达圈查询</h4>
     <div class="input-item">
         <div class="input-item-prepend"><span class="input-item-text" >工作地点</span></div>
         <input id='work_address' type="text">
@@ -87,8 +85,8 @@
         <input id="search" type="button" class="btn" onclick="loadWorkRange()" value="查询" />
     </div>
     <div>
-        <input type="button" class="btn" style="width:12rem;" onclick="delWorkRange()" value="清除到达圈" />
-        <input type="button" class="btn" style="width:12rem;" onclick="delTransferPlan()" value="清除路程规划" />
+        <input type="button" class="btn" style="width:9rem;" onclick="delWorkRange()" value="清除到达圈" />
+        <input type="button" class="btn" style="width:9rem;" onclick="delTransferPlan()" value="清除路程规划" />
     </div>
 </div>
 
