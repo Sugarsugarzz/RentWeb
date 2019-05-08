@@ -85,11 +85,10 @@
             <option value ="BUS">公交</option>
         </select>
         <input id="search" type="button" class="btn" onclick="loadWorkRange()" value="查询" />
-        <input id="clear" type="button" class="btn"  onclick="delWorkRange()" value="清除" />
     </div>
     <div>
-        <input type="button" class="btn" onclick="delRentLocation()" value="清除" />
-        <input type="button" class="btn" onclick="delTransferPlan()" value="清除" />
+        <input type="button" class="btn" style="width:12rem;" onclick="delWorkRange()" value="清除到达圈" />
+        <input type="button" class="btn" style="width:12rem;" onclick="delTransferPlan()" value="清除路程规划" />
     </div>
 </div>
 
@@ -205,10 +204,10 @@
                     panel: 'transfer_panel',
                     policy: AMap.TransferPolicy.LEAST_TIME //乘车策略
                 });
-                mapTransfer.search([
-                    {keyword: workAddress},
-                    {keyword: points[j]['location']}
-                ], function(status, result) { });
+                mapTransfer.search(
+                    new AMap.LngLat(x, y),
+                    new AMap.LngLat(points[j]['lnglat'][0], points[j]['lnglat'][1])
+                    , function(status, result) { });
             })
             rentMarkerArray.push(rentMark);
         }
