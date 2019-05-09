@@ -30,6 +30,8 @@
     <script src="${pageContext.request.contextPath}/static/js/houses/LianjiaCq.js"></script>
     <script src="${pageContext.request.contextPath}/static/js/houses/LianjiaWh.js"></script>
 
+    <script src="${pageContext.request.contextPath}/static/js/houses/LianjiaCs.js"></script>
+
     <style>
         html, body, #container {
             height: 100%;
@@ -75,6 +77,7 @@
             <option value ="成都市">成都市</option>
             <option value ="南京市">南京市</option>
             <option value ="武汉市">武汉市</option>
+            <option value ="长沙市">长沙市</option>
             <option value ="天津市">天津市</option>
             <option value ="厦门市">厦门市</option>
             <option value ="西安市">西安市</option>
@@ -132,7 +135,8 @@
         "成都市": [104.066143,30.573095],
         "杭州市": [120.155150,30.274150],
         "南京市": [118.796470,32.058380],
-        "武汉市": [114.305250,30.5927600],
+        "武汉市": [114.305250,30.592760],
+        "长沙市": [112.938860,28.227780],
         "天津市": [117.199370,39.085100],
         "厦门市": [118.089480,24.479510],
         "西安市": [108.939840,34.341270],
@@ -180,6 +184,9 @@
                 break;
             case "武汉市":
                 points = points_wh;
+                break;
+            case "长沙市":
+                points = points_cs;
                 break;
             case "天津市":
                 points = points_tj;

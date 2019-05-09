@@ -24,6 +24,8 @@
     <script src="${pageContext.request.contextPath}/static/js/houses/LianjiaHf.js"></script>
     <script src="${pageContext.request.contextPath}/static/js/houses/LianjiaCq.js"></script>
     <script src="${pageContext.request.contextPath}/static/js/houses/LianjiaWh.js"></script>
+
+    <script src="${pageContext.request.contextPath}/static/js/houses/LianjiaCs.js"></script>
 </head>
 <body>
 
@@ -31,7 +33,8 @@
     count = points_bj.length + points_sz.length + points_nj.length + points_xa.length + points_cq.length +
             points_sh.length + points_cd.length + points_hz.length + points_xm.length + points_wh.length +
             points_gz.length + points_tj.length + points_qd.length + points_hf.length
-    alert("共有" + count + "套房源。")
+    // alert("共有" + count + "套房源。")
+    alert(points_cs.length)
 </script>
 
 </body>
