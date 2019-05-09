@@ -64,6 +64,8 @@
 <div id="container"></div>
 
 <div class="input-card" style='width:25rem;'>
+    <h4 style='color:grey'>当前全国共有 <span id="country-houses-count"></span> 套房源</h4>
+    <h4 style='color:grey'>当前 <span id="city-houses"></span> 共有 <span id="city-houses-count"></span> 套房源</h4>
     <div class="input-item">
         <div class="input-item-prepend">
         <label class="input-item-text">城市</label>
@@ -210,6 +212,8 @@
 
         // 加载房源坐标
         loadRentLocation();
+        // 加载房源统计信息
+        countPoints();
     }
 
     // 信息窗体
@@ -411,7 +415,16 @@
         });
     });
 
-
+    countPoints();
+    // 统计房源总数
+    function countPoints() {
+        var count = points_bj.length + points_sz.length + points_nj.length + points_xa.length + points_cq.length +
+                    points_sh.length + points_cd.length + points_hz.length + points_xm.length + points_wh.length +
+                    points_gz.length + points_tj.length + points_qd.length + points_hf.length + points_cs.length;
+        document.getElementById("country-houses-count").innerHTML = count;
+        document.getElementById("city-houses-count").innerHTML = points.length;
+        document.getElementById("city-houses").innerHTML = city;
+    }
 </script>
 </body>
 </html>
