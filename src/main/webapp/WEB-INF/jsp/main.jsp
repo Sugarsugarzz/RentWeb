@@ -20,6 +20,16 @@
     <script src="${pageContext.request.contextPath}/static/js/houses/LianjiaSz.js"></script>
     <script src="${pageContext.request.contextPath}/static/js/houses/LianjiaCd.js"></script>
 
+    <script src="${pageContext.request.contextPath}/static/js/houses/LianjiaTj.js"></script>
+    <script src="${pageContext.request.contextPath}/static/js/houses/LianjiaNj.js"></script>
+    <script src="${pageContext.request.contextPath}/static/js/houses/LianjiaHz.js"></script>
+    <script src="${pageContext.request.contextPath}/static/js/houses/LianjiaQd.js"></script>
+    <script src="${pageContext.request.contextPath}/static/js/houses/LianjiaXa.js"></script>
+    <script src="${pageContext.request.contextPath}/static/js/houses/LianjiaXm.js"></script>
+    <script src="${pageContext.request.contextPath}/static/js/houses/LianjiaHf.js"></script>
+    <script src="${pageContext.request.contextPath}/static/js/houses/LianjiaCq.js"></script>
+    <script src="${pageContext.request.contextPath}/static/js/houses/LianjiaWh.js"></script>
+
     <style>
         html, body, #container {
             height: 100%;
@@ -61,7 +71,16 @@
             <option value ="上海市">上海市</option>
             <option value ="广州市">广州市</option>
             <option value ="深圳市">深圳市</option>
+            <option value ="杭州市">杭州市</option>
             <option value ="成都市">成都市</option>
+            <option value ="南京市">南京市</option>
+            <option value ="武汉市">武汉市</option>
+            <option value ="天津市">天津市</option>
+            <option value ="厦门市">厦门市</option>
+            <option value ="西安市">西安市</option>
+            <option value ="重庆市">重庆市</option>
+            <option value ="青岛市">青岛市</option>
+            <option value ="合肥市">合肥市</option>
         </select>
     </div>
     <div class="input-item">
@@ -110,7 +129,16 @@
         "上海市": [121.473658,31.230378],
         "广州市": [113.264385,23.129112],
         "深圳市": [114.085947,22.547],
-        "成都市": [104.066143,30.573095]
+        "成都市": [104.066143,30.573095],
+        "杭州市": [120.155150,30.274150],
+        "南京市": [118.796470,32.058380],
+        "武汉市": [114.305250,30.5927600],
+        "天津市": [117.199370,39.085100],
+        "厦门市": [118.089480,24.479510],
+        "西安市": [108.939840,34.341270],
+        "重庆市": [106.550730,29.564710],
+        "青岛市": [120.382990,36.066230],
+        "合肥市": [117.229010,31.820570],
     };
 
     setCity();
@@ -143,6 +171,33 @@
                 break;
             case "成都市":
                 points = points_cd;
+                break;
+            case "杭州市":
+                points = points_hz;
+                break;
+            case "南京市":
+                points = points_nj;
+                break;
+            case "武汉市":
+                points = points_wh;
+                break;
+            case "天津市":
+                points = points_tj;
+                break;
+            case "厦门市":
+                points = points_xm;
+                break;
+            case "西安市":
+                points = points_xa;
+                break;
+            case "重庆市":
+                points = points_cq;
+                break;
+            case "青岛市":
+                points = points_qd;
+                break;
+            case "合肥市":
+                points = points_hf;
                 break;
         }
 

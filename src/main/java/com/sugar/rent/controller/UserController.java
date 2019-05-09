@@ -41,7 +41,6 @@ public class UserController {
     @RequestMapping("/main")
     public String main() { return "main.jsp"; }
 
-
     /***
      * 登录 处理
      * @param user
@@ -120,6 +119,13 @@ public class UserController {
         map.put("flag", flag);
         return map;
     }
+
+    /***
+     * 统计房源总数
+     * @return
+     */
+    @RequestMapping("/count")
+    public String count() { return "count.jsp"; }
 
 
 }
