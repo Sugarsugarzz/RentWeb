@@ -139,8 +139,9 @@
             resizeEnable: true, //是否监控地图容器尺寸变化
             zoomEnable: true,
             zoom: 11, //初始化地图层级
-            center: [118.089480,24.479510], //初始化地图中心
+            center: cityToLngLat[city], //初始化地图中心
         });
+
 
         // 限制地图显示范围
         lockMapBounds();
