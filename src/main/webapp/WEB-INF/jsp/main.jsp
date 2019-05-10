@@ -142,7 +142,7 @@
             center: cityToLngLat[city], //初始化地图中心
         });
 
-
+        
         // 限制地图显示范围
         lockMapBounds();
 
@@ -172,10 +172,13 @@
         loadWorkLocation();
     });
 
-    // 加载房源信息
+    // 加载房源标记
     function loadRentLocation() {
 
-        <c:forEach items="${houses}" var="item" >
+        delRentLocation();
+
+
+        <c:forEach items="${housesBj}" var="item" >
 
         var rentMark = new AMap.Marker({
             position: ${item.lnglat},
@@ -210,17 +213,18 @@
             });
             <%--mapTransfer.search(--%>
             <%--new AMap.LngLat(x, y),--%>
-                <%--new AMap.LngLat("${item.lnglat[0]}", "${item.lnglat[1]}")--%>
-                <%--, function(status, result) { });--%>
-            <%--mapTransfer.search([--%>
-                <%--{keyword: workAddress, city:city},--%>
-                <%--{keyword: "${item.location}", city:city}--%>
-            <%--], function(status, result) { });--%>
+            <%--new AMap.LngLat("${item.lnglat[0]}", "${item.lnglat[1]}")--%>
+            <%--, function(status, result) { });--%>
+            mapTransfer.search([
+            {keyword: workAddress, city:city},
+            {keyword: "${item.location}", city:city}
+            ], function(status, result) { });
 
         })
         rentMarkerArray.push(rentMark);
 
         </c:forEach>
+
         addCluster();
     }
 
@@ -362,13 +366,26 @@
     });
 
     countPoints();
-    // // 统计房源总数
+    // 统计房源总数
     function countPoints() {
-        // var count = points_bj.length + points_sz.length + points_nj.length + points_xa.length + points_cq.length +
-        //             points_sh.length + points_cd.length + points_hz.length + points_xm.length + points_wh.length +
-        //             points_gz.length + points_tj.length + points_qd.length + points_hf.length + points_cs.length;
-        // document.getElementById("country-houses-count").innerHTML = count;
-        document.getElementById("city-houses-count").innerHTML = ${houses.size()};
+        var count = ${housesBj.size()} +
+                    ${housesCd.size()} +
+                    ${housesCq.size()} +
+                    ${housesCs.size()} +
+                    ${housesGz.size()} +
+                    ${housesHf.size()} +
+                    ${housesHz.size()} +
+                    ${housesNj.size()} +
+                    ${housesQd.size()} +
+                    ${housesSh.size()} +
+                    ${housesSz.size()} +
+                    ${housesTj.size()} +
+                    ${housesWh.size()} +
+                    ${housesXa.size()} +
+                    ${housesXm.size()};
+
+        document.getElementById("country-houses-count").innerHTML = count;
+        document.getElementById("city-houses-count").innerHTML = ${housesBj.size()};
         document.getElementById("city-houses").innerHTML = city;
     }
 </script>
