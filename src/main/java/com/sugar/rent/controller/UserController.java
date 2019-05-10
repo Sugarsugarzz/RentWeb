@@ -35,13 +35,6 @@ public class UserController {
 
 
     /***
-     * 访问 主页
-     * @return
-     */
-    @RequestMapping("/main")
-    public String main() { return "main.jsp"; }
-
-    /***
      * 登录 处理
      * @param user
      * @param model
