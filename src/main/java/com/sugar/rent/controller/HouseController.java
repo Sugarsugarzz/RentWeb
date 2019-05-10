@@ -25,9 +25,7 @@ public class HouseController {
     @RequestMapping("/list")
     public String list(Model model) {
 
-        String city = "厦门";
-
-        List<House> list = houseService.getHouseList(city);
+        List<House> list = houseService.getHouseListAtBj();
 
         model.addAttribute("houses", list);
 
@@ -41,12 +39,12 @@ public class HouseController {
     @RequestMapping("/main")
     public String main(Model model) {
 
-        String city = "厦门";
-
-        List<House> list = houseService.getHouseList(city);
+        List<House> list = houseService.getHouseListAtBj();
 
         model.addAttribute("houses", list);
 
         return "main.jsp";
     }
+
+
 }
