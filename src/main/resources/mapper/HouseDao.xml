@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sugar.rent.dao.HouseDao">
+
+    <resultMap id="HouseList" type="com.sugar.rent.entity.House">
+        <result column="city" property="city"></result>
+        <result column="title" property="title"></result>
+        <result column="location" property="location"></result>
+        <result column="lnglat" property="lnglat"></result>
+        <result column="size" property="size"></result>
+        <result column="orient" property="orient"></result>
+        <result column="type" property="type"></result>
+        <result column="price" property="price"></result>
+        <result column="time" property="time"></result>
+        <result column="image" property="image"></result>
+        <result column="url" property="url"></result>
+    </resultMap>
+
+    <select id="findHousesListByCity" parameterType="String" resultMap="HouseList">
+        SELECT *
+        FROM house
+        WHERE city = #{city}
+    </select>
+
+</mapper>
