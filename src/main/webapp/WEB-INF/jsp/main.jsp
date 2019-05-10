@@ -177,54 +177,51 @@
 
         delRentLocation();
 
-
         <c:forEach items="${housesBj}" var="item" >
 
-        var rentMark = new AMap.Marker({
-            position: ${item.lnglat},
-            title: "${item.title}",
-            icon: 'http://webapi.amap.com/theme/v1.3/markers/n/mark_b.png',
-        });
-        /*
-        需要在事件内使用事件外的循环变量i。
-        你的循环中只是为元素绑定事件，这时事件并没有触发执行。
-        等到事件触发时，那个循环早已经结束了，那时的i的值已经是循环最大值加1了。
-        所以需要用一些方式保存住当前循环的i的值。
-        用let块作用域变量. ⏬
-         */
-        <%--alert(${item.lnglat});--%>
-        <%--xy = ${item.lnglat};--%>
-        <%--xy = str(xy).split(",");--%>
-        <%--alert(xy);--%>
-        rentMark.on('click', function (e) {
-            // 信息窗体
-            var info = [];
-            info.push("<p class='input-item'>房源：" + "${item.title}" + "️</p>");
-            info.push("<p class='input-item'>点击跳转：<a target='_blank' href='" + "${item.url}" + "'>➡️</a>️</p>");
-            infoWindow.setContent(info.join(" "));
-            infoWindow.open(map, e.target.getPosition());
-            // 路程规划
-            if (mapTransfer) mapTransfer.clear();
-            mapTransfer = new AMap.Transfer({
-                map: map,
-                city: city,
-                panel: 'transfer_panel',
-                policy: AMap.TransferPolicy.LEAST_TIME //乘车策略
+            var rentMark = new AMap.Marker({
+                position: ${item.lnglat},
+                title: "${item.title}",
+                icon: 'http://webapi.amap.com/theme/v1.3/markers/n/mark_b.png',
             });
-            <%--mapTransfer.search(--%>
-            <%--new AMap.LngLat(x, y),--%>
-            <%--new AMap.LngLat("${item.lnglat[0]}", "${item.lnglat[1]}")--%>
-            <%--, function(status, result) { });--%>
-            mapTransfer.search([
-            {keyword: workAddress, city:city},
-            {keyword: "${item.location}", city:city}
-            ], function(status, result) { });
 
-        })
-        rentMarkerArray.push(rentMark);
+            rentMark.on('click', function (e) {
+                // 划分坐标x和y，String转List
+                var strLnglat = "${item.lnglat}";
+                strLnglat = strLnglat.substring(2, strLnglat.length - 2);
+                var lnglat = strLnglat.split("', '");
+
+                // 信息窗体
+                var info = [];
+                info.push("<h4 style='color:grey'><b>房源：</b>" + "${item.title}" + "️</h4>");
+                info.push("<h4 style='color:grey'><b>小区：</b>" + "${item.location}" + "️</h4>");
+                info.push("<h4 style='color:grey'><b>面积：</b>" + "${item.size}" + "️</h4>");
+                info.push("<h4 style='color:grey'><b>朝向：</b>" + "${item.orient}" + "️</h4>");
+                info.push("<h4 style='color:grey'><b>户型：</b>" + "${item.type}" + "️</h4>");
+                info.push("<h4 style='color:grey'><b>价钱：</b>" + "${item.price}" + " 月/元️</h4>");
+                info.push("<h4 style='color:grey'><b>发布时间：</b>" + "${item.time}" + "️</h4>");
+                info.push("<h4 style='color:grey'><b>点击跳转：</b><a target='_blank' href='" + "${item.url}" + "'>➡️</a>️</h4>");
+
+                infoWindow.setContent(info.join(" "));
+                infoWindow.open(map, e.target.getPosition());
+                // 路程规划
+                if (mapTransfer) mapTransfer.clear();
+                mapTransfer = new AMap.Transfer({
+                    map: map,
+                    city: city,
+                    panel: 'transfer_panel',
+                    policy: AMap.TransferPolicy.LEAST_TIME //乘车策略
+                });
+                mapTransfer.search(
+                    new AMap.LngLat(x, y),
+                    new AMap.LngLat(lnglat[0], lnglat[1])
+                    , function(status, result) { });
+            });
+            rentMarkerArray.push(rentMark);
 
         </c:forEach>
 
+        // 点聚合
         addCluster();
     }
 
@@ -365,7 +362,6 @@
         });
     });
 
-    countPoints();
     // 统计房源总数
     function countPoints() {
         var count = ${housesBj.size()} +
@@ -385,7 +381,55 @@
                     ${housesXm.size()};
 
         document.getElementById("country-houses-count").innerHTML = count;
-        document.getElementById("city-houses-count").innerHTML = ${housesBj.size()};
+
+        switch (city) {
+            case "北京市":
+                document.getElementById("city-houses-count").innerHTML = ${housesBj.size()};
+                break;
+            case "上海市":
+                document.getElementById("city-houses-count").innerHTML = ${housesSh.size()};
+                break;
+            case "广州市":
+                document.getElementById("city-houses-count").innerHTML = ${housesGz.size()};
+                break;
+            case "深圳市":
+                document.getElementById("city-houses-count").innerHTML = ${housesSz.size()};
+                break;
+            case "成都市":
+                document.getElementById("city-houses-count").innerHTML = ${housesCd.size()};
+                break;
+            case "杭州市":
+                document.getElementById("city-houses-count").innerHTML = ${housesHz.size()};
+                break;
+            case "南京市":
+                document.getElementById("city-houses-count").innerHTML = ${housesNj.size()};
+                break;
+            case "武汉市":
+                document.getElementById("city-houses-count").innerHTML = ${housesWh.size()};
+                break;
+            case "长沙市":
+                document.getElementById("city-houses-count").innerHTML = ${housesCs.size()};
+                break;
+            case "天津市":
+                document.getElementById("city-houses-count").innerHTML = ${housesTj.size()};
+                break;
+            case "厦门市":
+                document.getElementById("city-houses-count").innerHTML = ${housesXm.size()};
+                break;
+            case "西安市":
+                document.getElementById("city-houses-count").innerHTML = ${housesXa.size()};
+                break;
+            case "重庆市":
+                document.getElementById("city-houses-count").innerHTML = ${housesCq.size()};
+                break;
+            case "青岛市":
+                document.getElementById("city-houses-count").innerHTML = ${housesQd.size()};
+                break;
+            case "合肥市":
+                document.getElementById("city-houses-count").innerHTML = ${housesHf.size()};
+                break;
+        }
+
         document.getElementById("city-houses").innerHTML = city;
     }
 </script>
