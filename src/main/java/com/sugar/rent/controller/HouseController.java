@@ -7,8 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Controller
@@ -33,46 +39,118 @@ public class HouseController {
         return "list.jsp";
     }
 
+    @RequestMapping("/listChange")
+    public @ResponseBody
+    List<House> checkLogin(@RequestParam("city") String city) {
+
+        List<House> list = houseService.getHouseListAtGz();
+
+
+        return list;
+    }
+
     /***
      * 访问 主页
      * @return
      */
     @RequestMapping("/main")
-    public String main(ModelMap model) {
+    public String main(@RequestParam("city") String city, ModelMap model) {
 
-        List<House> listBj = houseService.getHouseListAtBj();
-        List<House> listCd = houseService.getHouseListAtCd();
-        List<House> listCq = houseService.getHouseListAtCq();
-        List<House> listCs = houseService.getHouseListAtCs();
-        List<House> listGz = houseService.getHouseListAtGz();
-        List<House> listHf = houseService.getHouseListAtHf();
-        List<House> listHz = houseService.getHouseListAtHz();
-        List<House> listNj = houseService.getHouseListAtNj();
-        List<House> listQd = houseService.getHouseListAtQd();
-        List<House> listSh = houseService.getHouseListAtSh();
-        List<House> listSz = houseService.getHouseListAtSz();
-        List<House> listTj = houseService.getHouseListAtTj();
-        List<House> listWh = houseService.getHouseListAtWh();
-        List<House> listXa = houseService.getHouseListAtXa();
-        List<House> listXm = houseService.getHouseListAtXm();
+        List<House> list;
 
+        switch (city) {
 
-        model.addAttribute("housesBj", listBj);
-        model.addAttribute("housesCd", listCd);
-        model.addAttribute("housesCq", listCq);
-        model.addAttribute("housesCs", listCs);
-        model.addAttribute("housesGz", listGz);
-        model.addAttribute("housesHf", listHf);
-        model.addAttribute("housesHz", listHz);
-        model.addAttribute("housesNj", listNj);
-        model.addAttribute("housesQd", listQd);
-        model.addAttribute("housesSh", listSh);
-        model.addAttribute("housesSz", listSz);
-        model.addAttribute("housesTj", listTj);
-        model.addAttribute("housesWh", listWh);
-        model.addAttribute("housesXa", listXa);
-        model.addAttribute("housesXm", listXm);
+            case "bj":
+                list = houseService.getHouseListAtBj();
+                model.addAttribute("houses", list);
+                model.addAttribute("city", "北京市");
+                return "main.jsp";
 
+            case "sh":
+                list = houseService.getHouseListAtSh();
+                model.addAttribute("houses", list);
+                model.addAttribute("city", "上海市");
+                return "main.jsp";
+
+            case "gz":
+                list = houseService.getHouseListAtGz();
+                model.addAttribute("houses", list);
+                model.addAttribute("city", "广州市");
+                return "main.jsp";
+
+            case "sz":
+                list = houseService.getHouseListAtSz();
+                model.addAttribute("houses", list);
+                model.addAttribute("city", "深圳市");
+                return "main.jsp";
+
+            case "hz":
+                list = houseService.getHouseListAtHz();
+                model.addAttribute("houses", list);
+                model.addAttribute("city", "杭州市");
+                return "main.jsp";
+
+            case "cd":
+                list = houseService.getHouseListAtCd();
+                model.addAttribute("houses", list);
+                model.addAttribute("city", "成都市");
+                return "main.jsp";
+
+            case "cq":
+                list = houseService.getHouseListAtCq();
+                model.addAttribute("houses", list);
+                model.addAttribute("city", "重庆市");
+                return "main.jsp";
+
+            case "cs":
+                list = houseService.getHouseListAtCs();
+                model.addAttribute("houses", list);
+                model.addAttribute("city", "长沙市");
+                return "main.jsp";
+
+            case "hf":
+                list = houseService.getHouseListAtHf();
+                model.addAttribute("houses", list);
+                model.addAttribute("city", "合肥市");
+                return "main.jsp";
+
+            case "nj":
+                list = houseService.getHouseListAtNj();
+                model.addAttribute("houses", list);
+                model.addAttribute("city", "南京市");
+                return "main.jsp";
+
+            case "tj":
+                list = houseService.getHouseListAtTj();
+                model.addAttribute("houses", list);
+                model.addAttribute("city", "天津市");
+                return "main.jsp";
+
+            case "qd":
+                list = houseService.getHouseListAtQd();
+                model.addAttribute("houses", list);
+                model.addAttribute("city", "青岛市");
+                return "main.jsp";
+
+            case "wh":
+                list = houseService.getHouseListAtWh();
+                model.addAttribute("houses", list);
+                model.addAttribute("city", "武汉市");
+                return "main.jsp";
+
+            case "xa":
+                list = houseService.getHouseListAtXa();
+                model.addAttribute("houses", list);
+                model.addAttribute("city", "西安市");
+                return "main.jsp";
+
+            case "xm":
+                list = houseService.getHouseListAtXm();
+                model.addAttribute("houses", list);
+                model.addAttribute("city", "厦门市");
+                return "main.jsp";
+
+        }
         return "main.jsp";
     }
 }
