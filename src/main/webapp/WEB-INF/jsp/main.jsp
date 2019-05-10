@@ -47,8 +47,8 @@
 <div id="container"></div>
 
 <div class="input-card" style='width:25rem;'>
-    <h4 style='color:grey'>当前全国共有 <span id="country-houses-count"></span> 套房源</h4>
-    <h4 style='color:grey'>当前 <span id="city-houses"></span> 共有 <span id="city-houses-count"></span> 套房源</h4>
+    <h4 style='color:grey'>当前全国共有 <span id="country-houses-count"></span> 套租赁房源</h4>
+    <h4 style='color:grey'>当前 <span id="city-houses"></span> 共有 <span id="city-houses-count"></span> 套租赁房源</h4>
     <div class="input-item">
         <div class="input-item-prepend">
         <label class="input-item-text">城市</label>
@@ -104,7 +104,7 @@
 
     // 全局变量们
     var map;                                        // 地图
-    var city = $("#city").val();                    // 城市
+    var city = "${city}";                           // 城市
     var workAddress, workMarker;                    // 工作地点
     var x, y, t, v, arrivalRange, polygonArray=[];  // 到达圈
     arrivalRange = new AMap.ArrivalRange();
@@ -129,29 +129,53 @@
         "合肥市": [117.229010,31.820570],
     };
 
-    setCity();
-    // 设置城市
+    var cityToSimple = {
+        "北京市": "bj",
+        "上海市": "sh",
+        "广州市": "gz",
+        "深圳市": "sz",
+        "成都市": "cd",
+        "杭州市": "hz",
+        "南京市": "nj",
+        "武汉市": "wh",
+        "长沙市": "cs",
+        "天津市": "tj",
+        "厦门市": "xm",
+        "西安市": "xa",
+        "重庆市": "cq",
+        "青岛市": "qd",
+        "合肥市": "hf",
+    };
+
+
+    // 初始化地图
+    if (map) map.destroy();
+    map = new AMap.Map("container", {
+        resizeEnable: true, //是否监控地图容器尺寸变化
+        zoomEnable: true,
+        zoom: 11, //初始化地图层级
+        center: cityToLngLat[city], //初始化地图中心
+    });
+
+
+
+    // 限制地图显示范围
+    lockMapBounds();
+
+    // 加载房源坐标
+    loadRentLocation();
+
+    // 加载房源统计信息
+    countPoints();
+
     function setCity() {
         city = $("#city").val();
-        if (map) map.destroy();
-        // 初始化地图
-        map = new AMap.Map("container", {
-            resizeEnable: true, //是否监控地图容器尺寸变化
-            zoomEnable: true,
-            zoom: 11, //初始化地图层级
-            center: cityToLngLat[city], //初始化地图中心
-        });
-
-        
-        // 限制地图显示范围
-        lockMapBounds();
-
-        // 加载房源坐标
-        loadRentLocation();
-
-        // 加载房源统计信息
-        countPoints();
+        window.location.href = '/Rent/main?city=' + cityToSimple[city];
     }
+    $(function(){
+        $("#city").val(city);
+    });
+
 
     // 信息窗体
     var infoWindow = new AMap.InfoWindow({offset: new AMap.Pixel(0, -30)});
@@ -177,7 +201,7 @@
 
         delRentLocation();
 
-        <c:forEach items="${housesBj}" var="item" >
+        <c:forEach items="${houses}" var="item" >
 
             var rentMark = new AMap.Marker({
                 position: ${item.lnglat},
@@ -364,71 +388,10 @@
 
     // 统计房源总数
     function countPoints() {
-        var count = ${housesBj.size()} +
-                    ${housesCd.size()} +
-                    ${housesCq.size()} +
-                    ${housesCs.size()} +
-                    ${housesGz.size()} +
-                    ${housesHf.size()} +
-                    ${housesHz.size()} +
-                    ${housesNj.size()} +
-                    ${housesQd.size()} +
-                    ${housesSh.size()} +
-                    ${housesSz.size()} +
-                    ${housesTj.size()} +
-                    ${housesWh.size()} +
-                    ${housesXa.size()} +
-                    ${housesXm.size()};
 
-        document.getElementById("country-houses-count").innerHTML = count;
+        document.getElementById("country-houses-count").innerHTML = 521212;
 
-        switch (city) {
-            case "北京市":
-                document.getElementById("city-houses-count").innerHTML = ${housesBj.size()};
-                break;
-            case "上海市":
-                document.getElementById("city-houses-count").innerHTML = ${housesSh.size()};
-                break;
-            case "广州市":
-                document.getElementById("city-houses-count").innerHTML = ${housesGz.size()};
-                break;
-            case "深圳市":
-                document.getElementById("city-houses-count").innerHTML = ${housesSz.size()};
-                break;
-            case "成都市":
-                document.getElementById("city-houses-count").innerHTML = ${housesCd.size()};
-                break;
-            case "杭州市":
-                document.getElementById("city-houses-count").innerHTML = ${housesHz.size()};
-                break;
-            case "南京市":
-                document.getElementById("city-houses-count").innerHTML = ${housesNj.size()};
-                break;
-            case "武汉市":
-                document.getElementById("city-houses-count").innerHTML = ${housesWh.size()};
-                break;
-            case "长沙市":
-                document.getElementById("city-houses-count").innerHTML = ${housesCs.size()};
-                break;
-            case "天津市":
-                document.getElementById("city-houses-count").innerHTML = ${housesTj.size()};
-                break;
-            case "厦门市":
-                document.getElementById("city-houses-count").innerHTML = ${housesXm.size()};
-                break;
-            case "西安市":
-                document.getElementById("city-houses-count").innerHTML = ${housesXa.size()};
-                break;
-            case "重庆市":
-                document.getElementById("city-houses-count").innerHTML = ${housesCq.size()};
-                break;
-            case "青岛市":
-                document.getElementById("city-houses-count").innerHTML = ${housesQd.size()};
-                break;
-            case "合肥市":
-                document.getElementById("city-houses-count").innerHTML = ${housesHf.size()};
-                break;
-        }
+        document.getElementById("city-houses-count").innerHTML = ${houses.size()};
 
         document.getElementById("city-houses").innerHTML = city;
     }
