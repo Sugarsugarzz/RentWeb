@@ -286,7 +286,7 @@
                     </p>
 
                     <a class="btn btn-theme mt-lg-5 mt-3 agile-link-bnr scroll btn-outline-secondary btn-change5"
-                       href="<c:url value="/main"/> " role="button">
+                       href="<c:url value="/main?city=bj"/> " role="button">
                         马上开始
                     </a>
                 </div>
