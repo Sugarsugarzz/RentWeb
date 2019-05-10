@@ -18,10 +18,79 @@
         <result column="url" property="url"></result>
     </resultMap>
 
-    <select id="findHousesListByCity" parameterType="String" resultMap="HouseList">
+    <select id="findHousesListAtBj" parameterType="String" resultMap="HouseList">
         SELECT *
-        FROM house
-        WHERE city = #{city}
+        FROM bj
+    </select>
+
+    <select id="findHousesListAtCd" parameterType="String" resultMap="HouseList">
+        SELECT *
+        FROM cd
+    </select>
+
+    <select id="findHousesListAtCq" parameterType="String" resultMap="HouseList">
+        SELECT *
+        FROM cq
+    </select>
+
+    <select id="findHousesListAtCs" parameterType="String" resultMap="HouseList">
+        SELECT *
+        FROM cs
+    </select>
+
+    <select id="findHousesListAtGz" parameterType="String" resultMap="HouseList">
+        SELECT *
+        FROM gz
+    </select>
+
+    <select id="findHousesListAtHf" parameterType="String" resultMap="HouseList">
+        SELECT *
+        FROM hf
+    </select>
+
+    <select id="findHousesListAtHz" parameterType="String" resultMap="HouseList">
+        SELECT *
+        FROM hz
+    </select>
+
+    <select id="findHousesListAtNj" parameterType="String" resultMap="HouseList">
+        SELECT *
+        FROM nj
+    </select>
+
+    <select id="findHousesListAtQd" parameterType="String" resultMap="HouseList">
+        SELECT *
+        FROM qd
+    </select>
+
+    <select id="findHousesListAtSh" parameterType="String" resultMap="HouseList">
+        SELECT *
+        FROM sh
+    </select>
+
+    <select id="findHousesListAtSz" parameterType="String" resultMap="HouseList">
+        SELECT *
+        FROM sz
+    </select>
+
+    <select id="findHousesListAtTj" parameterType="String" resultMap="HouseList">
+        SELECT *
+        FROM tj
+    </select>
+
+    <select id="findHousesListAtWh" parameterType="String" resultMap="HouseList">
+        SELECT *
+        FROM wh
+    </select>
+
+    <select id="findHousesListAtXa" parameterType="String" resultMap="HouseList">
+        SELECT *
+        FROM xa
+    </select>
+
+    <select id="findHousesListAtXm" parameterType="String" resultMap="HouseList">
+        SELECT *
+        FROM xm
     </select>
 
 </mapper>
