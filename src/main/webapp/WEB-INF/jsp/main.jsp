@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
          pageEncoding="utf-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <html>
 <head>
@@ -13,24 +14,6 @@
     <script src="https://cache.amap.com/lbs/static/es5.min.js"></script>
     <script src="https://webapi.amap.com/maps?v=1.4.14&key=ac0954489531af464cb5d86b6d522a7d&&plugin=AMap.Scale,AMap.Geocoder,AMap.Autocomplete,AMap.ArrivalRange,AMap.Transfer,AMap.MarkerClusterer"></script>
     <script src="http://cache.amap.com/lbs/static/jquery.range.js"></script>
-
-    <script src="${pageContext.request.contextPath}/static/js/houses/LianjiaBj.js"></script>
-    <script src="${pageContext.request.contextPath}/static/js/houses/LianjiaSh.js"></script>
-    <script src="${pageContext.request.contextPath}/static/js/houses/LianjiaGz.js"></script>
-    <script src="${pageContext.request.contextPath}/static/js/houses/LianjiaSz.js"></script>
-    <script src="${pageContext.request.contextPath}/static/js/houses/LianjiaCd.js"></script>
-
-    <script src="${pageContext.request.contextPath}/static/js/houses/LianjiaTj.js"></script>
-    <script src="${pageContext.request.contextPath}/static/js/houses/LianjiaNj.js"></script>
-    <script src="${pageContext.request.contextPath}/static/js/houses/LianjiaHz.js"></script>
-    <script src="${pageContext.request.contextPath}/static/js/houses/LianjiaQd.js"></script>
-    <script src="${pageContext.request.contextPath}/static/js/houses/LianjiaXa.js"></script>
-    <script src="${pageContext.request.contextPath}/static/js/houses/LianjiaXm.js"></script>
-    <script src="${pageContext.request.contextPath}/static/js/houses/LianjiaHf.js"></script>
-    <script src="${pageContext.request.contextPath}/static/js/houses/LianjiaCq.js"></script>
-    <script src="${pageContext.request.contextPath}/static/js/houses/LianjiaWh.js"></script>
-
-    <script src="${pageContext.request.contextPath}/static/js/houses/LianjiaCs.js"></script>
 
     <style>
         html, body, #container {
@@ -64,8 +47,8 @@
 <div id="container"></div>
 
 <div class="input-card" style='width:25rem;'>
-    <h4 style='color:grey'>当前全国共有 <span id="country-houses-count"></span> 套房源</h4>
-    <h4 style='color:grey'>当前 <span id="city-houses"></span> 共有 <span id="city-houses-count"></span> 套房源</h4>
+    <h4 style='color:grey'>当前全国共有 <span id="country-houses-count"></span> 套租赁房源</h4>
+    <h4 style='color:grey'>当前 <span id="city-houses"></span> 共有 <span id="city-houses-count"></span> 套租赁房源</h4>
     <div class="input-item">
         <div class="input-item-prepend">
         <label class="input-item-text">城市</label>
@@ -121,8 +104,7 @@
 
     // 全局变量们
     var map;                                        // 地图
-    var city = $("#city").val();                    // 城市
-    var points = points_bj;
+    var city = "${city}";                           // 城市
     var workAddress, workMarker;                    // 工作地点
     var x, y, t, v, arrivalRange, polygonArray=[];  // 到达圈
     arrivalRange = new AMap.ArrivalRange();
@@ -147,74 +129,51 @@
         "合肥市": [117.229010,31.820570],
     };
 
-    setCity();
-    // 设置城市
+    var cityToSimple = {
+        "北京市": "bj",
+        "上海市": "sh",
+        "广州市": "gz",
+        "深圳市": "sz",
+        "成都市": "cd",
+        "杭州市": "hz",
+        "南京市": "nj",
+        "武汉市": "wh",
+        "长沙市": "cs",
+        "天津市": "tj",
+        "厦门市": "xm",
+        "西安市": "xa",
+        "重庆市": "cq",
+        "青岛市": "qd",
+        "合肥市": "hf",
+    };
+
+
+    // 初始化地图
+    if (map) map.destroy();
+    map = new AMap.Map("container", {
+        resizeEnable: true, //是否监控地图容器尺寸变化
+        zoomEnable: true,
+        zoom: 11, //初始化地图层级
+        center: cityToLngLat[city], //初始化地图中心
+    });
+
+
+
+    // 限制地图显示范围
+    lockMapBounds();
+
+    // 加载房源坐标
+    loadRentLocation();
+
+    // 加载房源统计信息
+    countPoints();
+
     function setCity() {
         city = $("#city").val();
-        if (map) map.destroy();
-        // 初始化地图
-        map = new AMap.Map("container", {
-            resizeEnable: true, //是否监控地图容器尺寸变化
-            zoomEnable: true,
-            zoom: 11, //初始化地图层级
-            center: cityToLngLat[city], //初始化地图中心
-        });
-        lockMapBounds(); // 限制地图显示范围
-
-        // 设置房源文件索引列表
-        switch (city) {
-            case "北京市":
-                points = points_bj;
-                break;
-            case "上海市":
-                points = points_sh;
-                break;
-            case "广州市":
-                points = points_gz;
-                break;
-            case "深圳市":
-                points = points_sz;
-                break;
-            case "成都市":
-                points = points_cd;
-                break;
-            case "杭州市":
-                points = points_hz;
-                break;
-            case "南京市":
-                points = points_nj;
-                break;
-            case "武汉市":
-                points = points_wh;
-                break;
-            case "长沙市":
-                points = points_cs;
-                break;
-            case "天津市":
-                points = points_tj;
-                break;
-            case "厦门市":
-                points = points_xm;
-                break;
-            case "西安市":
-                points = points_xa;
-                break;
-            case "重庆市":
-                points = points_cq;
-                break;
-            case "青岛市":
-                points = points_qd;
-                break;
-            case "合肥市":
-                points = points_hf;
-                break;
-        }
-
-        // 加载房源坐标
-        loadRentLocation();
-        // 加载房源统计信息
-        countPoints();
+        window.location.href = '/Rent/main?city=' + cityToSimple[city];
     }
+    $("#city").val(city);
+
 
     // 信息窗体
     var infoWindow = new AMap.InfoWindow({offset: new AMap.Pixel(0, -30)});
@@ -235,29 +194,37 @@
         loadWorkLocation();
     });
 
-
-    // 加载房源信息
+    // 加载房源标记
     function loadRentLocation() {
-        for (var i = 0; i < points.length; i++) {
+
+        delRentLocation();
+
+        <c:forEach items="${houses}" var="item" >
+
             var rentMark = new AMap.Marker({
-                position: points[i]['lnglat'],
-                title: points[i]['title'],
+                position: ${item.lnglat},
+                title: "${item.title}",
                 icon: 'http://webapi.amap.com/theme/v1.3/markers/n/mark_b.png',
             });
-            rentMark.content = points[i]['title'];
-            /*
-            需要在事件内使用事件外的循环变量i。
-            你的循环中只是为元素绑定事件，这时事件并没有触发执行。
-            等到事件触发时，那个循环早已经结束了，那时的i的值已经是循环最大值加1了。
-            所以需要用一些方式保存住当前循环的i的值。
-            用let块作用域变量. ⏬
-             */
-            let j = i;
+
             rentMark.on('click', function (e) {
+                // 划分坐标x和y，String转List
+                var strLnglat = "${item.lnglat}";
+                strLnglat = strLnglat.substring(2, strLnglat.length - 2);
+                var lnglat = strLnglat.split("', '");
+
                 // 信息窗体
                 var info = [];
-                info.push("<p class='input-item'>房源：" + points[j]['title'] + "️</p>");
-                info.push("<p class='input-item'>点击跳转：<a target='_blank' href='" + points[j]['url'] + "'>➡️</a>️</p>");
+                info.push("<h4 style='color:grey'><b>房源：</b>" + "${item.title}" + "️</h4>");
+                info.push("<h4 style='color:grey'><b>小区：</b>" + "${item.location}" + "️</h4>");
+                info.push("<h4 style='color:grey'><b>面积：</b>" + "${item.size}" + "️</h4>");
+                info.push("<h4 style='color:grey'><b>朝向：</b>" + "${item.orient}" + "️</h4>");
+                info.push("<h4 style='color:grey'><b>户型：</b>" + "${item.type}" + "️</h4>");
+                info.push("<h4 style='color:grey'><b>价钱：</b>" + "${item.price}" + " 月/元️</h4>");
+                info.push("<h4 style='color:grey'><b>发布时间：</b>" + "${item.time}" + "️</h4>");
+                info.push("<h4 style='color:grey'><b>点击跳转：</b><a target='_blank' href='" + "${item.url}" + "'>➡️</a>️</h4>");
+                info.push("<h4 style='color:grey'><b>来源：</b>" + "${item.refer}" + "️</h4>");
+
                 infoWindow.setContent(info.join(" "));
                 infoWindow.open(map, e.target.getPosition());
                 // 路程规划
@@ -270,11 +237,14 @@
                 });
                 mapTransfer.search(
                     new AMap.LngLat(x, y),
-                    new AMap.LngLat(points[j]['lnglat'][0], points[j]['lnglat'][1])
+                    new AMap.LngLat(lnglat[0], lnglat[1])
                     , function(status, result) { });
-            })
+            });
             rentMarkerArray.push(rentMark);
-        }
+
+        </c:forEach>
+
+        // 点聚合
         addCluster();
     }
 
@@ -415,14 +385,13 @@
         });
     });
 
-    countPoints();
     // 统计房源总数
     function countPoints() {
-        var count = points_bj.length + points_sz.length + points_nj.length + points_xa.length + points_cq.length +
-                    points_sh.length + points_cd.length + points_hz.length + points_xm.length + points_wh.length +
-                    points_gz.length + points_tj.length + points_qd.length + points_hf.length + points_cs.length;
-        document.getElementById("country-houses-count").innerHTML = count;
-        document.getElementById("city-houses-count").innerHTML = points.length;
+
+        document.getElementById("country-houses-count").innerHTML = ${count};
+
+        document.getElementById("city-houses-count").innerHTML = ${houses.size()};
+
         document.getElementById("city-houses").innerHTML = city;
     }
 </script>

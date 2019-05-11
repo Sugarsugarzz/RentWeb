@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sugar.rent.dao.HouseDao">
+
+    <resultMap id="HouseList" type="com.sugar.rent.entity.House">
+        <result column="city" property="city"></result>
+        <result column="title" property="title"></result>
+        <result column="location" property="location"></result>
+        <result column="lnglat" property="lnglat"></result>
+        <result column="size" property="size"></result>
+        <result column="orient" property="orient"></result>
+        <result column="type" property="type"></result>
+        <result column="price" property="price"></result>
+        <result column="time" property="time"></result>
+        <result column="image" property="image"></result>
+        <result column="url" property="url"></result>
+        <result column="refer" property="refer"></result>
+    </resultMap>
+
+    <select id="findHousesListAtBj" parameterType="String" resultMap="HouseList">
+        SELECT *
+        FROM bj
+    </select>
+
+    <select id="findHousesListAtCd" parameterType="String" resultMap="HouseList">
+        SELECT *
+        FROM cd
+    </select>
+
+    <select id="findHousesListAtCq" parameterType="String" resultMap="HouseList">
+        SELECT *
+        FROM cq
+    </select>
+
+    <select id="findHousesListAtCs" parameterType="String" resultMap="HouseList">
+        SELECT *
+        FROM cs
+    </select>
+
+    <select id="findHousesListAtGz" parameterType="String" resultMap="HouseList">
+        SELECT *
+        FROM gz
+    </select>
+
+    <select id="findHousesListAtHf" parameterType="String" resultMap="HouseList">
+        SELECT *
+        FROM hf
+    </select>
+
+    <select id="findHousesListAtHz" parameterType="String" resultMap="HouseList">
+        SELECT *
+        FROM hz
+    </select>
+
+    <select id="findHousesListAtNj" parameterType="String" resultMap="HouseList">
+        SELECT *
+        FROM nj
+    </select>
+
+    <select id="findHousesListAtQd" parameterType="String" resultMap="HouseList">
+        SELECT *
+        FROM qd
+    </select>
+
+    <select id="findHousesListAtSh" parameterType="String" resultMap="HouseList">
+        SELECT *
+        FROM sh
+    </select>
+
+    <select id="findHousesListAtSz" parameterType="String" resultMap="HouseList">
+        SELECT *
+        FROM sz
+    </select>
+
+    <select id="findHousesListAtTj" parameterType="String" resultMap="HouseList">
+        SELECT *
+        FROM tj
+    </select>
+
+    <select id="findHousesListAtWh" parameterType="String" resultMap="HouseList">
+        SELECT *
+        FROM wh
+    </select>
+
+    <select id="findHousesListAtXa" parameterType="String" resultMap="HouseList">
+        SELECT *
+        FROM xa
+    </select>
+
+    <select id="findHousesListAtXm" parameterType="String" resultMap="HouseList">
+        SELECT *
+        FROM xm
+    </select>
+
+    <select id="countList" resultType="int">
+        SELECT SUM(count)
+        FROM count
+    </select>
+
+</mapper>
