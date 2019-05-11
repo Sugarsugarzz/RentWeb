@@ -223,6 +223,7 @@
                 info.push("<h4 style='color:grey'><b>价钱：</b>" + "${item.price}" + " 月/元️</h4>");
                 info.push("<h4 style='color:grey'><b>发布时间：</b>" + "${item.time}" + "️</h4>");
                 info.push("<h4 style='color:grey'><b>点击跳转：</b><a target='_blank' href='" + "${item.url}" + "'>➡️</a>️</h4>");
+                info.push("<h4 style='color:grey'><b>来源：</b>" + "${item.refer}" + "️</h4>");
 
                 infoWindow.setContent(info.join(" "));
                 infoWindow.open(map, e.target.getPosition());

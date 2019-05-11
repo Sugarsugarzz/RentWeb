@@ -16,6 +16,7 @@
         <result column="time" property="time"></result>
         <result column="image" property="image"></result>
         <result column="url" property="url"></result>
+        <result column="refer" property="refer"></result>
     </resultMap>
 
     <select id="findHousesListAtBj" parameterType="String" resultMap="HouseList">

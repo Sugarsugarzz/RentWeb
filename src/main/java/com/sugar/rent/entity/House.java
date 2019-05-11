@@ -28,6 +28,8 @@ public class House {
 
     private String url;
 
+    private String refer;
+
     public void setCity(String city) {
         this.city = city;
     }
@@ -114,5 +116,13 @@ public class House {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public void setRefer(String refer) {
+        this.refer = refer;
+    }
+
+    public String getRefer() {
+        return refer;
     }
 }
