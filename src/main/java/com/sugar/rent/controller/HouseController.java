@@ -7,17 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 @Controller
+@SessionAttributes("user")
 public class HouseController {
 
 
@@ -58,99 +54,104 @@ public class HouseController {
 
         List<House> list;
 
+        int count = houseService.getListCount();
+        model.addAttribute("count", count);
+
         switch (city) {
 
             case "bj":
                 list = houseService.getHouseListAtBj();
                 model.addAttribute("houses", list);
                 model.addAttribute("city", "北京市");
-                return "main.jsp";
+                break;
 
             case "sh":
                 list = houseService.getHouseListAtSh();
                 model.addAttribute("houses", list);
                 model.addAttribute("city", "上海市");
-                return "main.jsp";
+                break;
 
             case "gz":
                 list = houseService.getHouseListAtGz();
                 model.addAttribute("houses", list);
                 model.addAttribute("city", "广州市");
-                return "main.jsp";
+                break;
 
             case "sz":
                 list = houseService.getHouseListAtSz();
                 model.addAttribute("houses", list);
                 model.addAttribute("city", "深圳市");
-                return "main.jsp";
+                break;
 
             case "hz":
                 list = houseService.getHouseListAtHz();
                 model.addAttribute("houses", list);
                 model.addAttribute("city", "杭州市");
-                return "main.jsp";
+                break;
 
             case "cd":
                 list = houseService.getHouseListAtCd();
                 model.addAttribute("houses", list);
                 model.addAttribute("city", "成都市");
-                return "main.jsp";
+                break;
 
             case "cq":
                 list = houseService.getHouseListAtCq();
                 model.addAttribute("houses", list);
                 model.addAttribute("city", "重庆市");
-                return "main.jsp";
+                break;
 
             case "cs":
                 list = houseService.getHouseListAtCs();
                 model.addAttribute("houses", list);
                 model.addAttribute("city", "长沙市");
-                return "main.jsp";
+                break;
 
             case "hf":
                 list = houseService.getHouseListAtHf();
                 model.addAttribute("houses", list);
                 model.addAttribute("city", "合肥市");
-                return "main.jsp";
+                break;
 
             case "nj":
                 list = houseService.getHouseListAtNj();
                 model.addAttribute("houses", list);
                 model.addAttribute("city", "南京市");
-                return "main.jsp";
+                break;
 
             case "tj":
                 list = houseService.getHouseListAtTj();
                 model.addAttribute("houses", list);
                 model.addAttribute("city", "天津市");
-                return "main.jsp";
+                break;
 
             case "qd":
                 list = houseService.getHouseListAtQd();
                 model.addAttribute("houses", list);
                 model.addAttribute("city", "青岛市");
-                return "main.jsp";
+                break;
 
             case "wh":
                 list = houseService.getHouseListAtWh();
                 model.addAttribute("houses", list);
                 model.addAttribute("city", "武汉市");
-                return "main.jsp";
+                break;
 
             case "xa":
                 list = houseService.getHouseListAtXa();
                 model.addAttribute("houses", list);
                 model.addAttribute("city", "西安市");
-                return "main.jsp";
+                break;
 
             case "xm":
                 list = houseService.getHouseListAtXm();
                 model.addAttribute("houses", list);
                 model.addAttribute("city", "厦门市");
-                return "main.jsp";
+                break;
 
         }
+
+
         return "main.jsp";
     }
 }

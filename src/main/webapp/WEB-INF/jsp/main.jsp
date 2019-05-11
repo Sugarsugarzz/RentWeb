@@ -172,9 +172,7 @@
         city = $("#city").val();
         window.location.href = '/Rent/main?city=' + cityToSimple[city];
     }
-    $(function(){
-        $("#city").val(city);
-    });
+    $("#city").val(city);
 
 
     // 信息窗体
@@ -389,7 +387,7 @@
     // 统计房源总数
     function countPoints() {
 
-        document.getElementById("country-houses-count").innerHTML = 521212;
+        document.getElementById("country-houses-count").innerHTML = ${count};
 
         document.getElementById("city-houses-count").innerHTML = ${houses.size()};
 

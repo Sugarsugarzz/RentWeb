@@ -93,4 +93,9 @@
         FROM xm
     </select>
 
+    <select id="countList" resultType="int">
+        SELECT SUM(count)
+        FROM count
+    </select>
+
 </mapper>

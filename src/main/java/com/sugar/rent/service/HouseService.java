@@ -22,4 +22,8 @@ public interface HouseService {
     List<House> getHouseListAtWh();
     List<House> getHouseListAtXa();
     List<House> getHouseListAtXm();
+
+    // 统计房源总数
+    int getListCount();
+
 }

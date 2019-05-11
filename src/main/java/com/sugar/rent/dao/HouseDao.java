@@ -24,6 +24,7 @@ public interface HouseDao {
     List<House> findHousesListAtXa();
     List<House> findHousesListAtXm();
 
-
+    // 统计房源总数
+    int countList();
 
 }

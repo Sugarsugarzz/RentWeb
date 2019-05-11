@@ -119,4 +119,11 @@ public class HouseServiceImpl implements HouseService {
         List<House> list = houseDao.findHousesListAtXm();
         return list;
     }
+
+    @Override
+    public int getListCount() {
+
+        int count = houseDao.countList();
+        return count;
+    }
 }
