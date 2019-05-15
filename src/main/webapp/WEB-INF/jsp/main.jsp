@@ -224,7 +224,7 @@
                 info.push("<h4 style='color:grey'><b>发布时间：</b>" + "${item.time}" + "️</h4>");
                 info.push("<h4 style='color:grey'><b>点击跳转：</b><a target='_blank' href='" + "${item.url}" + "'>➡️</a>️</h4>");
                 info.push("<h4 style='color:grey'><b>来源：</b>" + "${item.refer}" + "️</h4>");
-
+                info.push("<h4 style='color:grey'><b><a onclick=\"collectSuccess()\">点击收藏</a></b>️</h4>");
                 infoWindow.setContent(info.join(" "));
                 infoWindow.open(map, e.target.getPosition());
                 // 路程规划
@@ -384,6 +384,11 @@
             showScale: true
         });
     });
+
+    // 提示收藏成功
+    function collectSuccess() {
+        alert("收藏成功！");
+    }
 
     // 统计房源总数
     function countPoints() {
