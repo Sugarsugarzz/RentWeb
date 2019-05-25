@@ -8,17 +8,17 @@ package com.sugar.rent.entity;
 public class User {
 
     //id
-    private int id;
+    private String id;
     //用户名
     private String username;
     //密码
     private String password;
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 

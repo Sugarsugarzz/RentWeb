@@ -126,4 +126,12 @@ public class HouseServiceImpl implements HouseService {
         int count = houseDao.countList();
         return count;
     }
+
+    @Override
+    public int collectHouse(String user_id, String house_id, String city) {
+
+//        int result = houseDao.
+        return 0;
+    }
+
 }

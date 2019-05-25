@@ -6,6 +6,8 @@ package com.sugar.rent.entity;
  */
 public class House {
 
+    private String id;
+
     private String city;
 
     private String title;
@@ -124,5 +126,13 @@ public class House {
 
     public String getRefer() {
         return refer;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

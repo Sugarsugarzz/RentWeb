@@ -26,4 +26,7 @@ public interface HouseService {
     // 统计房源总数
     int getListCount();
 
+    // 收藏房源
+    int collectHouse(String user_id, String house_id, String city);
+
 }

@@ -5,6 +5,7 @@
 <mapper namespace="com.sugar.rent.dao.HouseDao">
 
     <resultMap id="HouseList" type="com.sugar.rent.entity.House">
+        <result column="id" property="id"></result>
         <result column="city" property="city"></result>
         <result column="title" property="title"></result>
         <result column="location" property="location"></result>
@@ -98,5 +99,11 @@
         SELECT SUM(count)
         FROM count
     </select>
+
+
+    <!--<insert id="collectHouse">-->
+        <!--INSERT INTO #{city}-->
+         <!---->
+    <!--</insert>-->
 
 </mapper>

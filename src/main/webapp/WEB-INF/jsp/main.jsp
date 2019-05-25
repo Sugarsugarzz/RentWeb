@@ -15,6 +15,29 @@
     <script src="https://webapi.amap.com/maps?v=1.4.14&key=ac0954489531af464cb5d86b6d522a7d&&plugin=AMap.Scale,AMap.Geocoder,AMap.Autocomplete,AMap.ArrivalRange,AMap.Transfer,AMap.MarkerClusterer"></script>
     <script src="http://cache.amap.com/lbs/static/jquery.range.js"></script>
 
+    <script type="text/JavaScript">
+        function collectSuccess(houseId) {
+
+            $.ajax({
+                type: 'GET',
+
+                url: '/Rent/collectHouse',
+
+                data: {
+                    "house_id": houseId,
+                    "user_id": ${sessionScope.user.id},
+                },
+
+                success: function (data) {
+                    alert("收藏成功")
+                },
+
+                error: function () {
+                    alert("网络错误！")
+                }
+            })
+        }
+    </script>
     <style>
         html, body, #container {
             height: 100%;
@@ -224,7 +247,8 @@
                 info.push("<h4 style='color:grey'><b>发布时间：</b>" + "${item.time}" + "️</h4>");
                 info.push("<h4 style='color:grey'><b>点击跳转：</b><a target='_blank' href='" + "${item.url}" + "'>➡️</a>️</h4>");
                 info.push("<h4 style='color:grey'><b>来源：</b>" + "${item.refer}" + "️</h4>");
-                info.push("<h4 style='color:grey'><b><a onclick=\"collectSuccess()\">点击收藏</a></b>️</h4>");
+                myid = "${item.id}";
+                info.push("<h4 style='color:grey'><b><a onclick=\"collectSuccess(myid)\">点击收藏</a></b>️</h4>");
                 infoWindow.setContent(info.join(" "));
                 infoWindow.open(map, e.target.getPosition());
                 // 路程规划
@@ -386,9 +410,40 @@
     });
 
     // 提示收藏成功
-    function collectSuccess() {
-        alert("收藏成功！");
-    }
+    <%--function collectSuccess(house_id) {--%>
+        <%--$.ajax({--%>
+            <%--type: 'POST',--%>
+
+            <%--contentType: 'application/json; charset=utf-8',--%>
+
+            <%--url: '/Rent/collectHouse',--%>
+
+            <%--dataType: 'json',--%>
+
+            <%--data: '{"house_id": "123"}',--%>
+
+            <%--// '{"house_id":"' + 111--%>
+            <%--//     + '","user_id":"' + 222 + '"}',--%>
+
+            <%--// data: {'house_id': '111', 'user_id': '222},--%>
+
+            <%--success: function (data) {--%>
+                <%--if (data.flag == "success") {--%>
+
+
+
+                <%--} else if (data.flag == "failure") {--%>
+
+                <%--}--%>
+            <%--},--%>
+
+            <%--error: function () {--%>
+                <%--alert("网络错误！");--%>
+            <%--}--%>
+        <%--});--%>
+
+        <%--alert("收藏成功！ " + house_id + "\n" + cityToSimple[$("#city").val()] + "\n" + ${sessionScope.user.id} + "\n" );--%>
+    <%--}--%>
 
     // 统计房源总数
     function countPoints() {

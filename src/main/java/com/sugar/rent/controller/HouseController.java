@@ -9,7 +9,9 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Controller
@@ -18,6 +20,8 @@ public class HouseController {
 
 
     private final HouseService houseService;
+
+    private String theCity;
 
     @Autowired
     public HouseController(HouseService houseService) {
@@ -41,10 +45,33 @@ public class HouseController {
 
         List<House> list = houseService.getHouseListAtGz();
 
+        System.out.println("有效");
 
         return list;
     }
 
+    @RequestMapping("/collectHouse")
+    public @ResponseBody
+    Map<String, String> doCollect(@RequestParam("house_id") String house_id, @RequestParam("user_id") String user_id) {
+
+        Map<String, String> map = new HashMap<>();
+
+        String flag;
+
+//        if (userService.register(user) > 0) {
+//            user = userService.checkExistence(user.getUsername());
+//            model.addAttribute("user", user);
+//
+//            flag = "success";
+//        } else {
+//            flag = "failure";
+//        }
+        flag = "success";
+        System.out.println("打印一下 " + " " + house_id + "\n" + user_id + "\n" + theCity);
+
+        map.put("flag", flag);
+        return map;
+    }
     /***
      * 访问 主页
      * @return
@@ -151,6 +178,7 @@ public class HouseController {
 
         }
 
+        theCity = city;
 
         return "main.jsp";
     }
