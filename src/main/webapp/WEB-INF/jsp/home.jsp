@@ -34,6 +34,7 @@
                         document.getElementById("SignIn").style.display = "none";
                         document.getElementById("loginUserText").innerHTML = document.getElementById("username").value;
                         document.getElementById("loginUser").style.display = "block";
+                        document.getElementById("collection").style.display = "block";
 
                         //display:none方法会影响模态框的下次出现
                         $('#loginModal').modal('hide');
@@ -152,6 +153,7 @@
                             document.getElementById("SignIn").style.display = "none";
                             document.getElementById("loginUserText").innerHTML = document.getElementById("username1").value;
                             document.getElementById("loginUser").style.display = "block";
+                            document.getElementById("collection").style.display = "block";
 
                             //display:none方法会影响模态框的下次出现
                             $('#registerModal').modal('hide');
@@ -175,6 +177,7 @@
             document.getElementById("SignUp").style.display = "block";
             document.getElementById("SignIn").style.display = "block";
             document.getElementById("loginUser").style.display = "none";
+            document.getElementById("collection").style.display = "none";
 
         }
 
@@ -209,7 +212,7 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav ml-lg-auto text-center">
                         <li class="nav-item active  mr-lg-3">
-                            <a class="nav-link" href="home.jsp">主页
+                            <a class="nav-link" href="#">主页
                                 <span class="sr-only">(current)</span>
                             </a>
                         </li>
@@ -220,25 +223,26 @@
                                 北京
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item scroll" href="#process">北京</a>
+                                <a class="dropdown-item scroll" href="#">北京</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item scroll" href="#pricing">上海</a>
+                                <a class="dropdown-item scroll" href="#">上海</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item scroll" href="#partners">深圳</a>
+                                <a class="dropdown-item scroll" href="#">深圳</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item scroll" href="#partners">广州</a>
+                                <a class="dropdown-item scroll" href="#">广州</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item scroll" href="#partners">杭州</a>
+                                <a class="dropdown-item scroll" href="#">杭州</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item scroll" href="#partners">成都</a>
+                                <a class="dropdown-item scroll" href="#">成都</a>
                                 <div class="dropdown-divider"></div>
                             </div>
                         </li>
                         <li class="nav-item mr-lg-3 mt-lg-0 mt-3">
-                            <a class="nav-link scroll" href="#contact">房源收藏</a>
+                            <a id="collection" style="display: none;" class="nav-link scroll" data-toggle="modal" aria-pressed="false"
+                               data-target="#collectionModal">房源收藏</a>
                         </li>
                         <li class="nav-item mb-lg-0 mb-3">
-                            <a class="nav-link scroll" href="#register">说明/公告</a>
+                            <a class="nav-link scroll" href="">说明/公告</a>
                         </li>
                         <li>
                             <button id="SignUp" style="display: block;" type="button" class="btn  ml-lg-2 w3ls-btn" data-toggle="modal" aria-pressed="false"
@@ -423,6 +427,37 @@
                     </div>
                 </form>
             </div>
+        </div>
+    </div>
+</div>
+<!-- //register -->
+
+<!-- register  -->
+<div class="modal fade" id="collectionModal" tabindex="-1" role="dialog" aria-labelledby="collectionModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="collectionModalLabel">房源收藏本</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <table border="1">
+            <tr>
+                <td>
+                    <h4 class="col-form-label"><b>整租·长阳半岛怡和路8号院3室1厅南/北</b>️</h4>
+                    <h4 class="col-form-label"><b>165㎡  朝南北  3室1厅2卫  8300/月  链家   点击跳转：</b><a target='_blank' href='https://bj.lianjia.com/zufang/BJ2254337560132730880.html'>➡️</a>️</h4>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h4 class="col-form-label"><b>整租·半岛金街2房间西</b>️</h4>
+                    <h4 class="col-form-label"><b>63㎡  朝西  2房间1卫  3600/月  链家   点击跳转：</b><a target='_blank' href='https://bj.lianjia.com/zufang/BJ1920136887801225216.html'>➡️</a>️</h4>
+
+                </td>
+            </tr>
+            </table>
         </div>
     </div>
 </div>
