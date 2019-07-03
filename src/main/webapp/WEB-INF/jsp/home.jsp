@@ -432,7 +432,7 @@
 </div>
 <!-- //register -->
 
-<!-- register  -->
+<!-- collection  -->
 <div class="modal fade" id="collectionModal" tabindex="-1" role="dialog" aria-labelledby="collectionModalLabel"
      aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -446,28 +446,34 @@
             <table border="1">
             <tr>
                 <td>
-                    <h4 class="col-form-label"><b>整租·长阳半岛怡和路8号院3室1厅南/北</b>️</h4>
-                    <h4 class="col-form-label"><b>165㎡  朝南北  3室1厅2卫  8300/月  链家   点击跳转：</b><a target='_blank' href='https://bj.lianjia.com/zufang/BJ2254337560132730880.html'>➡️</a>️</h4>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <h4 class="col-form-label"><b>整租·半岛金街2房间西</b>️</h4>
-                    <h4 class="col-form-label"><b>63㎡  朝西  2房间1卫  3600/月  链家   点击跳转：</b><a target='_blank' href='https://bj.lianjia.com/zufang/BJ1920136887801225216.html'>➡️</a>️</h4>
-
+                    <h4 class="col-form-label"><b>整租·天坛东里中区3室1厅南/北</b>️</h4>
+                    <h4 class="col-form-label"><b>68㎡  朝南 北  3室1厅1卫  8500/月  链家   点击跳转：</b><a target='_blank' href='https://bj.lianjia.com/zufang/BJ2238333528414887936.html'>➡️</a>️</h4>
                 </td>
             </tr>
             </table>
         </div>
     </div>
 </div>
-<!-- //register -->
+<!-- //collection -->
 
 
 <!-- js -->
 <script src="${pageContext.request.contextPath}/static/js/login/jquery-2.2.3.min.js"></script>
 <script src="${pageContext.request.contextPath}/static/js/login/bootstrap.js"></script>
 <!-- //js -->
+
+<script>
+    $(function () {
+        if (${sessionScope.user.id}) {
+
+            document.getElementById("SignUp").style.display = "none";
+            document.getElementById("SignIn").style.display = "none";
+            document.getElementById("loginUserText").innerHTML = '${sessionScope.user.username}';
+            document.getElementById("loginUser").style.display = "block";
+            document.getElementById("collection").style.display = "block";
+        }
+    })
+</script>
 
 </body>
 
